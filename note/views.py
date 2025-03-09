@@ -33,7 +33,11 @@ def create_note(request):
     return redirect("/note/")
 
 def note_list(request):
-    notes = Note.objects.all().order_by('-modified_time') if request.user.is_staff else []
+    notes = Note.objects.all().order_by('-modified_time')
+
+    if not request.user.is_staff:
+        notes = notes.filter(is_public = True)
+
     return render(request, 'note/note_list.html', {'notes': notes})
 
 @require_http_methods(["POST"])
@@ -43,6 +47,16 @@ def delete_note(request, note_id):
     note = get_object_or_404(Note, id=note_id)
     note.delete()
 
+    # Return a success response
+    return JsonResponse({'status': 'success'})
+
+
+@require_http_methods(["POST"])
+@staff_required
+def public_note(request, note_id):
+    note = get_object_or_404(Note, id=note_id)
+    note.is_public = not note.is_public
+    note.save()
     # Return a success response
     return JsonResponse({'status': 'success'})
 

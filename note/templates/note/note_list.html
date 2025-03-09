@@ -21,6 +21,9 @@
    padding: 0.2em;
    font-size: 12px;
   }
+  .note-content-public {
+   background: #f0fff6;
+  }
   p { margin: 0; padding: 0; }
   form { margin: 0; padding: 0; }
  </style>
@@ -47,9 +50,10 @@
      <div>
       <button class="btn btn-sm btn-outline-secondary copy-btn" data-content="{{ note.contents.strip }}" title="Copy to clipboard">📋</button>
       <button class="btn btn-sm btn-outline-danger delete-btn" data-id="{{ note.id }}" title="Delete note">❌</button>
+      <button class="btn btn-sm btn-outline-danger public-btn" data-id="{{ note.id }}" title="Make public">{% if note.is_public %}🔓{% else %}🌐{% endif %}</button>
      </div>
     </div>
-    <div class="note-content">{{ note.contents.strip|linebreaks }}</div>
+    <div class="note-content {% if note.is_public %}note-content-public{% endif %}">{{ note.contents.strip|linebreaks }}</div>
    </div>
   {% empty %}
    <p class="text-muted">No notes yet.</p>
@@ -109,6 +113,26 @@
       }
      });
     }
+   });
+  });
+
+  // Make Public Note Functionality
+  document.querySelectorAll('.public-btn').forEach(button => {
+   button.addEventListener('click', () => {
+    const noteId = button.getAttribute('data-id');
+    fetch(`/note/public/${noteId}/`, {
+     method: 'POST',
+     headers: {
+      'X-CSRFToken': '{{ csrf_token }}',
+      'Content-Type': 'application/json',
+     },
+    }).then(response => {
+     if (response.ok) {
+      window.location.reload(); // Reload the page after deletion
+     } else {
+      alert('Failed to toggle public the note.');
+     }
+    });
    });
   });
  </script>
