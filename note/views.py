@@ -1,8 +1,10 @@
 from .models import Note
+from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
 import hashlib
+staff_required = staff_member_required()
 
 @require_http_methods(["POST"])
 def create_note(request):
@@ -31,10 +33,11 @@ def create_note(request):
     return redirect("/note/")
 
 def note_list(request):
-    notes = Note.objects.all().order_by('-modified_time')
+    notes = Note.objects.all().order_by('-modified_time') if request.user.is_staff else []
     return render(request, 'note/note_list.html', {'notes': notes})
 
 @require_http_methods(["POST"])
+@staff_required
 def delete_note(request, note_id):
     # Ensure the note exists and delete it
     note = get_object_or_404(Note, id=note_id)
