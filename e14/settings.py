@@ -15,22 +15,34 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-w5j^wv1-_5^-c@x*5mmd&127zg=-nzvzjab^r4y=4ya0)(ci)w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
-ALLOWED_HOSTS = [
-"element14.pythonanywhere.com",
-"localhost",
-"127.0.0.1",
-]
 
+import socket
+THIS_HOSTNAME = socket.gethostname()
+# Check whether it looks like we're deployed
+if THIS_HOSTNAME.endswith(".local"):
+    SECRET_KEY = 'django-insecure-w5j^wv1-_5^-c@x*5mmd&127zg=-nzvzjab^r4y=4ya0)(ci)w'
+    DEBUG = True
+    ALLOWED_HOSTS = [
+      "element14.pythonanywhere.com",
+      "localhost",
+      "127.0.0.1",
+    ]
+else:
+    import json
+    JDATA = json.loads(open("conf/settings.conf").read())
+    SECRET_KEY = JDATA["SECRET_KEY"]
+    DEBUG = False
+    ALLOWED_HOSTS = [
+      "element14.pythonanywhere.com",
+    ]
 
 # Application definition
 
