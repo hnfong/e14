@@ -37,7 +37,7 @@ if THIS_HOSTNAME.endswith(".local"):
     ]
 else:
     import json
-    JDATA = json.loads(open("conf/settings.conf").read())
+    JDATA = json.loads(open(BASE_DIR / "conf/settings.conf").read())
     SECRET_KEY = JDATA["SECRET_KEY"]
     DEBUG = False
     ALLOWED_HOSTS = [
