@@ -53,7 +53,7 @@
       <button class="btn btn-sm btn-outline-danger delete-btn" data-id="{{ note.id }}" title="Delete note">❌</button>
      </div>
     </div>
-    <div class="note-content {% if note.is_public %}note-content-public{% endif %}">{{ note.contents.strip|linebreaks }}</div>
+    <div class="note-content {% if note.is_public %}note-content-public{% endif %}">{{ note.contents.strip|linebreaksbr }}</div>
    </div>
   {% empty %}
    <p class="text-muted">No notes yet.</p>
