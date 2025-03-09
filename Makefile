@@ -9,3 +9,5 @@ migrate:
 	source .venv/bin/activate && ./manage.py makemigrations
 	source .venv/bin/activate && ./manage.py migrate
 
+conf/settings.conf:
+	python generate_settings.py > $@
