@@ -1,0 +1,116 @@
+<!-- templates/note/note_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Pastebin Notes</title>
+ <!-- Bootstrap 4.6 CSS -->
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+ <style>
+  .note-title {
+   font-size: 16px;
+   font-weight: bold;
+  }
+  .note-content {
+   background: #f8f9fa;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+   font-family: monospace;
+   white-space: pre-wrap;
+   padding: 0.2em;
+   font-size: 12px;
+  }
+  p { margin: 0; padding: 0; }
+  form { margin: 0; padding: 0; }
+ </style>
+</head>
+<body>
+ <div id='overlay' style='display:none; background-color: #AAA; height: 200px; width: 100%; position: absolute;'></div>
+ <div class="container mt-1">
+  <!-- Create New Note Form -->
+  <div>
+   <form method="post" action="{% url 'create_note' %}">{% csrf_token %}
+    <input type="text" name="title" class="form-control" placeholder="Title">
+    <textarea name="content" class="form-control" placeholder="Content" rows="5" required></textarea>
+    <button type="submit" class="btn btn-primary">Save</button>
+   </form>
+  </div>
+
+  <!-- List of Notes -->
+  {% for note in notes %}
+   <div class="mb-3 mt-1">
+    <div class="d-flex justify-content-between align-items-center">
+     <div class="note-title" title="created {{ note.create_time|date:'Y-m-d H:i' }} modified {{ note.modified_time|date:'Y-m-d H:i' }}">
+      {{ note.display_title }}
+     </div>
+     <div>
+      <button class="btn btn-sm btn-outline-secondary copy-btn" data-content="{{ note.contents.strip }}" title="Copy to clipboard">📋</button>
+      <button class="btn btn-sm btn-outline-danger delete-btn" data-id="{{ note.id }}" title="Delete note">❌</button>
+     </div>
+    </div>
+    <div class="note-content">{{ note.contents.strip|linebreaks }}</div>
+   </div>
+  {% empty %}
+   <p class="text-muted">No notes yet.</p>
+  {% endfor %}
+ </div>
+
+ <!-- JavaScript for Copy and Delete Functionality -->
+ <script>
+  function hAlert(msg) {
+   const ele = document.getElementById('overlay');
+   ele.innerText = msg;
+   ele.style.display = 'block';
+   setTimeout(function() { ele.style.display = 'none'; }, 2000);
+  }
+  document.querySelectorAll('.note-content').forEach(div => {
+   div.addEventListener('dblclick', () => {
+    const noteTitle = div.previousElementSibling.querySelector('.note-title').innerText;
+    const noteContent = div.innerText;
+
+    document.querySelector('input[name="title"]').value = '[EDIT] ' + noteTitle;
+    document.querySelector('textarea[name="content"]').value = noteContent;
+
+    // Optionally, you can add logic to scroll to the form or highlight it
+    document.querySelector('form').scrollIntoView({ behavior: 'smooth' });
+   });
+  });
+
+
+  // Copy to Clipboard Functionality
+  document.querySelectorAll('.copy-btn').forEach(button => {
+   button.addEventListener('click', () => {
+    const content = button.getAttribute('data-content');
+    navigator.clipboard.writeText(content).then(() => {
+     hAlert('Copied to clipboard!');
+    }).catch(() => {
+     alert('Failed to copy.');
+    });
+   });
+  });
+
+  // Delete Note Functionality
+  document.querySelectorAll('.delete-btn').forEach(button => {
+   button.addEventListener('click', () => {
+    const noteId = button.getAttribute('data-id');
+    if (confirm('Are you sure you want to delete this note?')) {
+     fetch(`/note/delete/${noteId}/`, {
+      method: 'POST',
+      headers: {
+       'X-CSRFToken': '{{ csrf_token }}',
+       'Content-Type': 'application/json',
+      },
+     }).then(response => {
+      if (response.ok) {
+       window.location.reload(); // Reload the page after deletion
+      } else {
+       alert('Failed to delete the note.');
+      }
+     });
+    }
+   });
+  });
+ </script>
+</body>
+</html>
