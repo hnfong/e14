@@ -62,6 +62,13 @@
 
  <!-- JavaScript for Copy and Delete Functionality -->
  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const notes = document.querySelectorAll('.note-content');
+    const urlPattern = /(https?:\/\/[^\s<>]+)/g;  // linebreaksbr would just make the \n <br /> and doesn't preserve the \n. At any rate shouldn't include htmls as well.
+    notes.forEach(note => {
+        note.innerHTML = note.innerHTML.replace(urlPattern, match => `<a href="${match}" rel="noreferrer">${match}</a>`);
+    });
+  });
   function hAlert(msg) {
    const ele = document.getElementById('overlay');
    ele.innerText = msg;
