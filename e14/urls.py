@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from note.views import index  # Import the index view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("note/", include("note.urls")),
-
+    path("", index, name="index"),  # Map root URL to note.views.index
 ]

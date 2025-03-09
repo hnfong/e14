@@ -45,3 +45,7 @@ def delete_note(request, note_id):
 
     # Return a success response
     return JsonResponse({'status': 'success'})
+
+def index(request):
+    return render(request, "note/index.html")
+
