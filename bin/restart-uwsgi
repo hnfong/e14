@@ -1,0 +1,12 @@
+#!/bin/sh -x
+
+set -e
+
+skill uwsgi
+sleep 1 # Sleep a bit in case it takes time to kill
+skill -9 uwsgi
+sleep 1 # Sleep a bit in case it takes time to kill
+. venv/bin/activate
+
+# https://uwsgi-docs.readthedocs.io/en/latest/LogFormat.html#uwsgi-default-logging
+uwsgi -p 5 -M --home="$PWD/venv" --socket localhost:8001 --module wordshk.wsgi:application --harakiri=200 --env DJANGO_SETTINGS_MODULE=wordshk.settings --max-requests=20 --vacuum --daemonize="$HOME"/words.hk.log --logformat='[pid: %(pid)|app: -|req: -/-] %(addr) (%(user)) {%(vars) vars in %(pktsize) bytes} [%(ctime)] %(host) %(method) %(uri) => generated %(rsize) bytes in %(msecs) msecs (%(proto) %(status)) %(headers) headers in %(hsize) bytes (%(switches) switches on core %(core)) extra: {uagent:%(uagent),,,}'
