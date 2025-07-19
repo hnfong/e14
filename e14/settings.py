@@ -32,6 +32,7 @@ if THIS_HOSTNAME.endswith(".local"):
     DEBUG = True
     ALLOWED_HOSTS = [
       "element14.pythonanywhere.com",
+      "e14.siyeah.com",
       "localhost",
       "127.0.0.1",
     ]
@@ -42,6 +43,7 @@ else:
     DEBUG = False
     ALLOWED_HOSTS = [
       "element14.pythonanywhere.com",
+      "e14.siyeah.com",
     ]
 
 # Application definition

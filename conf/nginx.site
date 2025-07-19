@@ -1,7 +1,7 @@
 # the upstream component nginx needs to connect to
 upstream django_e14 {
     # server unix:///path/to/your/mysite/mysite.sock; # for a file socket
-    server /home/e14/e14.sock;
+    server unix:///home/e14/e14.sock;
 }
 
 # configuration of the server
