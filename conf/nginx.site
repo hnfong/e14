@@ -1,0 +1,49 @@
+# the upstream component nginx needs to connect to
+upstream django_e14 {
+    # server unix:///path/to/your/mysite/mysite.sock; # for a file socket
+    server /home/e14/e14.sock;
+}
+
+# configuration of the server
+server {
+    # the port your site will be served on
+    listen      80;
+
+    # the domain name it will serve for
+    server_name e14.siyeah.com; # substitute your machine's IP address or FQDN
+    charset     utf-8;
+
+    # max upload size
+    client_max_body_size 1M;   # adjust to taste
+
+    # Django media
+    location /media  {
+        alias /home/e14/e14/media;  # your Django project's media files - amend as required
+    }
+
+    location /static {
+        alias /home/e14/e14/static; # your Django project's static files - amend as required
+    }
+
+    root /var/www/html;  # Not really used except for certbot
+
+    # Finally, send all non-media requests to the Django server.
+    location / {
+        uwsgi_pass  django_e14;
+        uwsgi_read_timeout 300;
+        uwsgi_send_timeout 300;
+        proxy_read_timeout 300;
+        include     /etc/nginx/uwsgi_params; # the uwsgi_params file you installed
+    }
+
+}
+
+
+# server {
+  # listen 80;
+  # server_name beta.words.hk www.words.hk *.words.hk;
+# 
+  # location / {
+    # return 301    https://words.hk$request_uri;
+  # }
+# }

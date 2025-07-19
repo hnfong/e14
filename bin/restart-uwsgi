@@ -9,4 +9,4 @@ sleep 1 # Sleep a bit in case it takes time to kill
 . .venv/bin/activate
 
 # https://uwsgi-docs.readthedocs.io/en/latest/LogFormat.html#uwsgi-default-logging
-uwsgi -p 2 -M --home="$PWD/.venv" --socket localhost:8001 --module e14.wsgi:application --harakiri=200 --env DJANGO_SETTINGS_MODULE=e14.settings --max-requests=20 --vacuum --daemonize="$HOME"/e14.log --logformat='[pid: %(pid)|app: -|req: -/-] %(addr) (%(user)) {%(vars) vars in %(pktsize) bytes} [%(ctime)] %(host) %(method) %(uri) => generated %(rsize) bytes in %(msecs) msecs (%(proto) %(status)) %(headers) headers in %(hsize) bytes (%(switches) switches on core %(core)) extra: {uagent:%(uagent),,,}'
+uwsgi -p 2 -M --home="$PWD/.venv" --socket "$PWD/../e14.sock" --module e14.wsgi:application --harakiri=200 --env DJANGO_SETTINGS_MODULE=e14.settings --max-requests=20 --vacuum --daemonize="$HOME"/e14.log --logformat='[pid: %(pid)|app: -|req: -/-] %(addr) (%(user)) {%(vars) vars in %(pktsize) bytes} [%(ctime)] %(host) %(method) %(uri) => generated %(rsize) bytes in %(msecs) msecs (%(proto) %(status)) %(headers) headers in %(hsize) bytes (%(switches) switches on core %(core)) extra: {uagent:%(uagent),,,}'
