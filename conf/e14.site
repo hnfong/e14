@@ -7,7 +7,6 @@ upstream django_e14 {
 # configuration of the server
 server {
     # the port your site will be served on
-    listen      80;
 
     # the domain name it will serve for
     server_name e14.siyeah.com; # substitute your machine's IP address or FQDN
@@ -36,14 +35,24 @@ server {
         include     /etc/nginx/uwsgi_params; # the uwsgi_params file you installed
     }
 
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/e14.siyeah.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/e14.siyeah.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
 }
 
+server {
+    if ($host = e14.siyeah.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
 
-# server {
-  # listen 80;
-  # server_name beta.words.hk www.words.hk *.words.hk;
-# 
-  # location / {
-    # return 301    https://words.hk$request_uri;
-  # }
-# }
+
+    listen      80;
+    server_name e14.siyeah.com;
+    return 404; # managed by Certbot
+
+
+}
