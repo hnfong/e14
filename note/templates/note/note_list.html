@@ -45,11 +45,16 @@
    <div class="mb-3 mt-1">
     <div class="d-flex justify-content-between align-items-center">
      <div class="note-title" title="created {{ note.create_time|date:'Y-m-d H:i' }} modified {{ note.modified_time|date:'Y-m-d H:i' }}">
+      {% if note.display_title %}
       {{ note.display_title }}
+      {% else %}
+       (Untitled)
+      {% endif %}
      </div>
      <div>
       <button class="btn btn-sm btn-outline-danger public-btn" data-id="{{ note.id }}" title="Make public">{% if note.is_public %}🔓{% else %}🌐{% endif %}</button>
-      <button class="btn btn-sm btn-outline-secondary copy-btn" data-content="{{ note.contents.strip }}" title="Copy to clipboard">📋</button>
+      <button class="btn btn-sm btn-outline-danger edit-btn" data-id="{{ note.id }}" title="Edit note">✏️</button>
+      <button class="btn btn-sm btn-outline-secondary copy-btn" data-content="{{ note.contents.strip }}" title="Copy to clipboard"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button>
       <button class="btn btn-sm btn-outline-danger delete-btn" data-id="{{ note.id }}" title="Delete note">❌</button>
      </div>
     </div>
@@ -62,32 +67,61 @@
 
  <!-- JavaScript for Copy and Delete Functionality -->
  <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const notes = document.querySelectorAll('.note-content');
-    const urlPattern = /(https?:\/\/[^\s<>]+)/g;  // linebreaksbr would just make the \n <br /> and doesn't preserve the \n. At any rate shouldn't include htmls as well.
-    notes.forEach(note => {
-        note.innerHTML = note.innerHTML.replace(urlPattern, match => `<a href="${match}" rel="noreferrer">${match}</a>`);
-    });
-  });
+  function editNote(div) {
+   const noteTitle = div.previousElementSibling.querySelector('.note-title').innerText;
+   const noteContent = div.innerText;
+
+   document.querySelector('input[name="title"]').value = '[EDIT] ' + noteTitle;
+   document.querySelector('textarea[name="content"]').value = noteContent;
+
+   // Optionally, you can add logic to scroll to the form or highlight it
+   document.querySelector('form').scrollIntoView({ behavior: 'smooth' });
+  }
   function hAlert(msg) {
    const ele = document.getElementById('overlay');
    ele.innerText = msg;
    ele.style.display = 'block';
    setTimeout(function() { ele.style.display = 'none'; }, 2000);
   }
+
+  const doubleDblClickThreshold = 2000; // ms
+
+ document.addEventListener('DOMContentLoaded', function() {
+  const notes = document.querySelectorAll('.note-content');
+  const urlPattern = /(https?:\/\/[^\s<>]+)/g;  // linebreaksbr would just make the \n <br /> and doesn't preserve the \n. At any rate shouldn't include htmls as well.
+  notes.forEach(note => {
+      note.innerHTML = note.innerHTML.replace(urlPattern, match => `<a href="${match}" rel="noreferrer">${match}</a>`);
+  });
+
+  document.querySelector('textarea[name="content"]').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && (e.altKey||e.metaKey)) {
+      e.preventDefault();
+      document.querySelector('form').submit();
+    }
+  });
+
   document.querySelectorAll('.note-content').forEach(div => {
    div.addEventListener('dblclick', () => {
-    const noteTitle = div.previousElementSibling.querySelector('.note-title').innerText;
-    const noteContent = div.innerText;
-
-    document.querySelector('input[name="title"]').value = '[EDIT] ' + noteTitle;
-    document.querySelector('textarea[name="content"]').value = noteContent;
-
-    // Optionally, you can add logic to scroll to the form or highlight it
-    document.querySelector('form').scrollIntoView({ behavior: 'smooth' });
+    const now = Date.now();
+    if (!div.lastDblClickTime || now - div.lastDblClickTime > doubleDblClickThreshold) {
+     div.lastDblClickTime = now;
+     return;
+    }
+    // Double-dblclick detected
+    editNote(div);
    });
   });
 
+  // Edit button
+  document.querySelectorAll('.edit-btn').forEach(button => {
+   button.addEventListener('click', () => {
+    let ele = button;
+    while (ele && !ele.querySelector("DIV.note-content")) {
+     ele = ele.parentElement;
+    }
+    editNote(ele.querySelector("DIV.note-content"));
+   });
+  });
 
   // Copy to Clipboard Functionality
   document.querySelectorAll('.copy-btn').forEach(button => {
@@ -142,6 +176,7 @@
     });
    });
   });
+ });
  </script>
 </body>
 </html>
