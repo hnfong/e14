@@ -12,11 +12,26 @@
    padding-top: 20px;
   }
   .quote-card {
-   margin-bottom: 16px;
-   background: white;
-   border-radius: 8px;
-   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-   padding: 16px;
+      position: relative;
+      padding: 16px;
+      padding-top: 30px; /* Make space for delete button */
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+  .quote-delete-form {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+  }
+  .quote-delete-form .btn {
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2em;
   }
   .quote-content {
    font-style: italic;
@@ -57,6 +72,12 @@
   <!-- Quotes List -->
   {% for quote in quotes %}
    <div class="quote-card">
+    <form method="post" action="{% url 'quotes:delete_quote' quote.id %}" class="quote-delete-form">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this quote?')">
+        ❌
+      </button>
+    </form>
     <div class="quote-content">{{ quote.content }}</div>
     {% if quote.source %}
     <div class="quote-source">
