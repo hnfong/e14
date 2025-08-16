@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>e14 Note</title>
+ <!-- Bootstrap 4.6 CSS -->
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+ <style>
+  body {
+   background-color: #f8f9fa;
+   padding-top: 20px;
+  }
+  .quote-card {
+   margin-bottom: 16px;
+   background: white;
+   border-radius: 8px;
+   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+   padding: 16px;
+  }
+  .quote-content {
+   font-style: italic;
+   margin-bottom: 8px;
+  }
+  .quote-source {
+   color: #6c757d;
+   font-size: 0.9em;
+  }
+  .quote-time {
+   color: #888;
+   font-size: 0.8em;
+  }
+  .form-container {
+   margin-bottom: 30px;
+  }
+ </style>
+</head>
+<body>
+ <div class="container">
+  <h1 class="mb-4">My Quotes</h1>
+
+  <!-- Add Quote Form -->
+  <div class="form-container">
+   <h5>Add New Quote</h5>
+   <form method="post" action="{% url 'quotes:add_quote' %}">
+    {% csrf_token %}
+    <div class="form-group">
+     <textarea name="content" class="form-control" rows="3" placeholder="Enter quote..." required></textarea>
+    </div>
+    <div class="form-group">
+     <input type="text" name="source" class="form-control" placeholder="Source (e.g. Book, URL, Podcast)">
+    </div>
+    <button type="submit" class="btn btn-primary btn-sm">Add Quote</button>
+   </form>
+  </div>
+
+  <!-- Quotes List -->
+  {% for quote in quotes %}
+   <div class="quote-card">
+    <div class="quote-content">{{ quote.content }}</div>
+    {% if quote.source %}
+    <div class="quote-source">
+        —
+        {% if quote.source|slice:":7" == "http://" or quote.source|slice:":8" == "https://" %}
+        <a href="{{ quote.source }}" target="_blank">{{ quote.source }}</a>
+        {% else %}
+        {{ quote.source }}
+        {% endif %}
+    </div>
+    {% endif %}
+    <div class="quote-time">{{ quote.create_time|date:"M d, Y" }}</div>
+   </div>
+  {% empty %}
+   <p>No quotes yet.</p>
+  {% endfor %}
+ </div>
+
+ <!-- Bootstrap JS and dependencies -->
+ <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

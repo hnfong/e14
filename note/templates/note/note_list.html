@@ -33,7 +33,7 @@
  <div class="container mt-1">
   <!-- Create New Note Form -->
   <div>
-   <form method="post" action="{% url 'create_note' %}">{% csrf_token %}
+   <form method="post" action="{% url 'note:create_note' %}">{% csrf_token %}
     <input type="text" name="title" class="form-control" placeholder="Title">
     <textarea name="content" class="form-control" placeholder="Content" rows="5" required></textarea>
     <button type="submit" class="btn btn-primary">Save</button>

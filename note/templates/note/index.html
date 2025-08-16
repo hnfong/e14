@@ -1,10 +1,54 @@
-<!-- note/templates/note/index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Welcome</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>e14 Note</title>
+  <!-- Bootstrap 4.6 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .container {
+      margin-top: 5rem;
+      text-align: center;
+    }
+    .btn {
+      margin: 0.5rem;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border-radius: 50px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      display: inline-block; /* Remove list-style */
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background-color: #6c757d;
+      border: none;
+    }
+    .btn-secondary:hover {
+      background-color: #545b62;
+      transform: translateY(-2px);
+    }
+    li {
+        list-style: none;
+    }
+  </style>
 </head>
 <body>
-    <p><a href="{% url 'note_list' %}">e14 Note</a></p>
+  <div class="container">
+      <li><a href="{% url 'note:note_list' %}" class="btn btn-primary">Notes</a></li>
+      <li><a href="{% url 'quotes:quote_list' %}" class="btn btn-secondary">Quotes</a></li>
+  </div>
 </body>
 </html>
