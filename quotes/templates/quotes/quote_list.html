@@ -79,7 +79,7 @@
         ❌
       </button>
     </form>
-    <div class="quote-content">{{ quote.content }}</div>
+    <div class="quote-content">{{ quote.content|linebreaks }}</div>
     {% if quote.source %}
     <div class="quote-source">
         —
