@@ -13,12 +13,12 @@
     <a href="{% url 'admin:journal_entry_change' entry.id %}">Edit</a>
 {% endif %}
    </div>
-   <h2><a href="{% url 'view_slug' entry.slug %}">{{ entry.title }}</a></h2>
+   <h2><a href="{% url 'journal:view_slug' entry.slug %}">{{ entry.title }}</a></h2>
    <div class="meta">
     {{ entry.created_at|date:"M d, Y" }}
     {% if entry.tags %} |
      {% for tag in entry.tags.split %}
-      <a href="{% url 'tagged_entries' tag|slice:'2:' %}" class="tag">{{ tag }}</a>
+      <a href="{% url 'journal:tagged_entries' tag|slice:'2:' %}" class="tag">{{ tag }}</a>
      {% endfor %}
     {% endif %}
    </div>

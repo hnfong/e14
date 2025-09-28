@@ -153,9 +153,9 @@
         <h1>隨筆</h1>
 
         <div class="tabs">
-            <a href="{% url 'blog_list' %}" class="tab {% if active_tab == 'blog' %}active{% endif %}">記事</a>
-            <a href="{% url 'topic_list' %}" class="tab {% if active_tab == 'topic' %}active{% endif %}">格物</a>
-            <a href="{% url 'archive_list' %}" class="tab {% if active_tab == 'archive' %}active{% endif %}">留念</a>
+            <a href="{% url 'journal:blog_list' %}" class="tab {% if active_tab == 'blog' %}active{% endif %}">記事</a>
+            <a href="{% url 'journal:topic_list' %}" class="tab {% if active_tab == 'topic' %}active{% endif %}">格物</a>
+            <a href="{% url 'journal:archive_list' %}" class="tab {% if active_tab == 'archive' %}active{% endif %}">留念</a>
         </div>
 
         <div class="content">
