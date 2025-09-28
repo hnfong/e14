@@ -10,13 +10,15 @@ class Entry(models.Model):
         ('archive', 'Archive Entry'), # Mainly used to archive urls, images, etc. that I have seen and have some thoughts about.
     )
 
+    ENTRY_TYPES_KEYS = [x[0] for x in ENTRY_TYPES]
+
     title = models.CharField(max_length=500, blank=True, null=True)
     slug = models.SlugField(unique=True)
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     entry_type = models.CharField(max_length=20, choices=ENTRY_TYPES, default='blog')
 
     is_hidden = models.BooleanField(default=False)  # This is basically deletion
-    is_public = models.BooleanField(default=False)
+    is_public = models.BooleanField(default=True)
 
     content = models.TextField()
 
@@ -31,6 +33,9 @@ class Entry(models.Model):
 
     # Used to store any AI generated stuff
     ai_slop = models.TextField(editable=False, null=True, blank=True)
+
+    def split_tags(self):
+        return (self.tags or "").split()
 
     def __str__(self):
         return f"Journal:{self.id}<{self.title[:20] or self.content[:20]}>"

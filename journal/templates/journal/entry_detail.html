@@ -1,0 +1,50 @@
+{% extends "journal/base.html" %}
+
+{% block content %}
+<article class="entry-detail">
+  <header>
+   <div class="staff-actions">
+{% if request.user.is_staff %}
+    <a href="{% url 'admin:journal_entry_change' entry.id %}">Edit</a>
+{% endif %}
+   </div>
+    <h1>{{ entry.title }}</h1>
+    <p class="meta">
+      <strong>Type:</strong> {{ entry.get_entry_type_display }} |
+      <strong>Published:</strong> {{ entry.created_at|date:"M d, Y" }}
+      {% if entry.updated_at != entry.created_at %}
+        (Updated: {{ entry.updated_at|date:"M d, Y" }})
+      {% endif %}
+    </p>
+    {% if entry.tags %}
+      <p class="tags">
+        <strong>Tags:</strong>
+        {% for tag in entry.split_tags %}
+            <a href="{% url 'tagged_entries' tag|slice:'2:' %}">{{ tag|slice:'2:' }}</a>
+        {% endfor %}
+      </p>
+    {% endif %}
+  </header>
+
+  <div class="content">
+      <div class="markdown-source" style="display: none;">{{ entry.content }}</div>
+      <div class="markdown-rendered"></div>
+  </div>
+
+      {% comment %}
+  {% if entry.media_file %}
+    <div class="media">
+      <strong>Media:</strong>
+      {% if entry.media_file.url.endswith('.jpg') or entry.media_file.url.endswith('.png') or entry.media_file.url.endswith('.jpeg') %}
+        <img src="{{ entry.media_file.url }}" alt="Attached media" style="max-width: 100%;">
+      {% else %}
+        <a href="{{ entry.media_file.url }}" target="_blank">Download attached file</a>
+      {% endif %}
+    </div>
+  {% endif %}
+      {% endcomment %}
+
+  <hr>
+  <a href="{% url 'blog_list' %}">← Back to journal</a>
+</article>
+{% endblock %}

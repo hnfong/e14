@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.utils import timezone
 
 from . import models
@@ -33,3 +34,10 @@ class EntryAdmin(admin.ModelAdmin):
         if not obj.tags:
             obj.tags = None
         super().save_model(request, obj, form, change)
+
+    def response_change(self, request, obj):
+        # 🤖🤖🤖
+        if "_continue" not in request.POST and "_saveasnew" not in request.POST:
+            self.message_user(request, "Entry saved. Returning to entry page.")
+            return redirect('view_slug', slug=obj.slug)
+        return super().response_change(request, obj)

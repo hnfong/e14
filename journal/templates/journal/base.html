@@ -86,6 +86,15 @@
             margin-top: 0;
         }
 
+        .entry h2 a, .entry h3 a {
+            color: var(--grey-500);
+            margin-top: 0;
+            text-decoration: none;
+        }
+        .entry h2 a:hover, .entry h3 a:hover {
+            color: var(--grey-400);
+        }
+
         .meta {
             color: var(--grey-600);
             font-size: 0.85rem;
@@ -110,6 +119,12 @@
             text-decoration: none;
         }
 
+        div.staff-actions {
+            float: right;
+            padding: 0px;
+            margin: 0px;
+        }
+
         @media (max-width: 480px) {
             .container {
                 padding: 15px;
@@ -125,6 +140,12 @@
                 padding: 16px;
             }
         }
+
+.markdown-rendered img { max-width: 100%; height: auto; }
+.markdown-rendered pre { background: var(--grey-300); padding: 10px; overflow: auto; }
+.markdown-rendered code { font-family: monospace; background: var(--grey-300); padding: 2px 4px; }
+.markdown-rendered blockquote { border-left: 3px solid var(--grey-400); margin: 0; padding-left: 10px; }
+
     </style>
 </head>
 <body>
@@ -141,5 +162,15 @@
             {% block content %}{% endblock %}
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.markdown-source').forEach(function(sourceEl) {
+        const renderedEl = sourceEl.nextElementSibling;
+        const markdown = sourceEl.textContent || sourceEl.innerText;
+        renderedEl.innerHTML = marked.parse(markdown);
+    });
+});
+    </script>
 </body>
 </html>
