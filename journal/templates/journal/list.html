@@ -18,7 +18,7 @@
     {{ entry.created_at|date:"M d, Y" }}
     {% if entry.tags %} |
      {% for tag in entry.tags.split %}
-      <a href="{% url 'journal:tagged_entries' tag|slice:'2:' %}" class="tag">{{ tag }}</a>
+      <a href="{% url 'journal:tagged_entries' tag|slice:'2:' %}" class="tag">{{ tag|slice:'2:' }}</a>
      {% endfor %}
     {% endif %}
    </div>
