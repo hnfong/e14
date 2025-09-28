@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Journal</title>
+    <title>隨筆 - {% block subtitle %}呢度嗰度{% endblock subtitle %}</title>
     <style>
         :root {
             --grey-100: #101010;
@@ -150,12 +150,12 @@
 </head>
 <body>
     <div class="container">
-        <h1>Journal</h1>
+        <h1>隨筆</h1>
 
         <div class="tabs">
-            <a href="{% url 'blog_list' %}" class="tab {% if active_tab == 'blog' %}active{% endif %}">Blog</a>
-            <a href="{% url 'topic_list' %}" class="tab {% if active_tab == 'topic' %}active{% endif %}">Comments</a>
-            <a href="{% url 'archive_list' %}" class="tab {% if active_tab == 'archive' %}active{% endif %}">Archival</a>
+            <a href="{% url 'blog_list' %}" class="tab {% if active_tab == 'blog' %}active{% endif %}">記事</a>
+            <a href="{% url 'topic_list' %}" class="tab {% if active_tab == 'topic' %}active{% endif %}">格物</a>
+            <a href="{% url 'archive_list' %}" class="tab {% if active_tab == 'archive' %}active{% endif %}">留念</a>
         </div>
 
         <div class="content">

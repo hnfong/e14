@@ -1,5 +1,9 @@
 {% extends "journal/base.html" %}
 
+{% block subtitle %}
+{{ entry.title }}
+{% endblock %}
+
 {% block content %}
 <article class="entry-detail">
   <header>
@@ -10,8 +14,7 @@
    </div>
     <h1>{{ entry.title }}</h1>
     <p class="meta">
-      <strong>Type:</strong> {{ entry.get_entry_type_display }} |
-      <strong>Published:</strong> {{ entry.created_at|date:"M d, Y" }}
+      {{ entry.created_at|date:"M d, Y" }}
       {% if entry.updated_at != entry.created_at %}
         (Updated: {{ entry.updated_at|date:"M d, Y" }})
       {% endif %}
@@ -45,6 +48,6 @@
       {% endcomment %}
 
   <hr>
-  <a href="{% url 'blog_list' %}">← Back to journal</a>
+  <a href="{% url 'blog_list' %}">← Back</a><!-- TODO: back depending on type -->
 </article>
 {% endblock %}
