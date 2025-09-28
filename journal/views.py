@@ -6,7 +6,7 @@ from . import dj
 def entry_list(request, typ):
     assert typ in models.Entry.ENTRY_TYPES_KEYS
     entries = models.Entry.list().filter(entry_type=typ)
-    entries = dj.paginate(entries, 2, request)
+    entries = dj.paginate(entries, 10, request)
     return render(request, f'journal/list.html', {
         'entries': entries,
         'active_tab': typ
@@ -21,7 +21,7 @@ def archive_list(request):
 
 def tagged_entries(request, tag):
     entries = models.Entry.list().filter(tags__icontains=f"t:{tag}")
-    entries = dj.paginate(entries, 2, request)
+    entries = dj.paginate(entries, 10, request)
     return render(request, 'journal/list.html', {
         'entries': entries,
         'tag': tag
