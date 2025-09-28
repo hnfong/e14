@@ -1,0 +1,22 @@
+{% extends "journal/base.html" %}
+
+{% block content %}
+ <h2>Entries tagged: <span style="color: var(--grey-400)">t:{{ tag }}</span></h2>
+
+ {% for entry in entries %}
+  <div class="entry">
+   <h3><a href="#" style="color: var(--grey-500); text-decoration: none;">{{ entry.title }}</a></h3>
+   <div class="meta">
+    {{ entry.created_at|date:"M d, Y" }} |
+    Type: {{ entry.get_entry_type_display }}
+   </div>
+   {% if entry.entry_type == 'journal' %}
+    <div class="content">
+     {{ entry.content|truncatewords:50|linebreaks }}
+    </div>
+   {% endif %}
+  </div>
+ {% empty %}
+  <p>No entries found with this tag.</p>
+ {% endfor %}
+{% endblock %}

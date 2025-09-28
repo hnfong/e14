@@ -5,15 +5,18 @@ from django.utils import timezone
 
 class Entry(models.Model):
     ENTRY_TYPES = (
-        ('journal', 'Diary Entry'),  # This is a normal journal entry
-        ('comment', 'Encyclopedia Entry'), # The main intent is to comment on the titled subject, and we may add to this as my understanding improves.
-        ('archival', 'Archival Comment'), # Mainly used to archive urls, images, etc. that I have seen and have some thoughts about.
+        ('blog', 'Blog Entry'),  # This is a normal journal entry
+        ('topic', 'Topical Entry'), # The main intent is to comment on the titled subject, and we may add to this as my understanding improves.
+        ('archive', 'Archive Entry'), # Mainly used to archive urls, images, etc. that I have seen and have some thoughts about.
     )
 
     title = models.CharField(max_length=500, blank=True, null=True)
     slug = models.SlugField(unique=True)
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    entry_type = models.CharField(max_length=20, choices=ENTRY_TYPES, default='journal')
+    entry_type = models.CharField(max_length=20, choices=ENTRY_TYPES, default='blog')
+
+    is_hidden = models.BooleanField(default=False)  # This is basically deletion
+    is_public = models.BooleanField(default=False)
 
     content = models.TextField()
 
@@ -29,9 +32,13 @@ class Entry(models.Model):
     # Used to store any AI generated stuff
     ai_slop = models.TextField(editable=False, null=True, blank=True)
 
-    class Meta:
-        ordering = ['-created_at']
-
     def __str__(self):
-        return f"Journal:{self.id}<{self.title or self.subject or self.content[:50]}>"
+        return f"Journal:{self.id}<{self.title[:20] or self.content[:20]}>"
 
+    @staticmethod
+    def list(is_public=None, ordering=None):
+        if is_public is None:
+            is_public = True
+        if ordering is None:
+            ordering = "-created_at"
+        return Entry.objects.filter(is_hidden=False).filter(is_public=is_public).order_by(ordering)

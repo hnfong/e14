@@ -106,6 +106,10 @@
             font-size: 0.8rem;
         }
 
+        a.tag {
+            text-decoration: none;
+        }
+
         @media (max-width: 480px) {
             .container {
                 padding: 15px;
@@ -128,9 +132,9 @@
         <h1>Journal</h1>
 
         <div class="tabs">
-            <a href="{% url 'blog_list' %}" class="tab {% if active_tab == 'journal' %}active{% endif %}">Blog</a>
-            <a href="{% url 'comment_list' %}" class="tab {% if active_tab == 'comment' %}active{% endif %}">Comments</a>
-            <a href="{% url 'archival_list' %}" class="tab {% if active_tab == 'archival' %}active{% endif %}">Archival</a>
+            <a href="{% url 'blog_list' %}" class="tab {% if active_tab == 'blog' %}active{% endif %}">Blog</a>
+            <a href="{% url 'topic_list' %}" class="tab {% if active_tab == 'topic' %}active{% endif %}">Comments</a>
+            <a href="{% url 'archive_list' %}" class="tab {% if active_tab == 'archive' %}active{% endif %}">Archival</a>
         </div>
 
         <div class="content">

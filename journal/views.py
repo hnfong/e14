@@ -2,40 +2,33 @@ from django.shortcuts import render
 from django.views.generic import ListView
 from .models import Entry
 
-class EntryListView(ListView):
-    model = Entry
-    template_name = 'journal/entry_list.html'
-    context_object_name = 'entries'
-    paginate_by = 10
-
-    def get_queryset(self):
-        entries = Entry.objects.filter(entry_type=self.kwargs['entry_type'])
-        return entries
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['entry_type'] = self.kwargs['entry_type']
-        context['active_tab'] = self.kwargs['entry_type']
-        return context
+from . import dj
 
 # Specific views for each tab
 def blog_list(request):
-    entries = Entry.objects.filter(entry_type='journal')
+    entries = Entry.list().filter(entry_type='blog')
     return render(request, 'journal/blog_list.html', {
         'entries': entries,
         'active_tab': 'journal'
     })
 
-def comment_list(request):
-    entries = Entry.objects.filter(entry_type='comment')
-    return render(request, 'journal/comment_list.html', {
+def topic_list(request):
+    entries = Entry.list().filter(entry_type='topic')
+    return render(request, 'journal/topic_list.html', {
         'entries': entries,
-        'active_tab': 'comment'
+        'active_tab': 'topic'
     })
 
-def archival_list(request):
-    entries = Entry.objects.filter(entry_type='archival')
-    return render(request, 'journal/archival_list.html', {
+def archive_list(request):
+    entries = Entry.list().filter(entry_type='archive')
+    return render(request, 'journal/archive_list.html', {
         'entries': entries,
-        'active_tab': 'archival'
+        'active_tab': 'archive'
+    })
+
+def tagged_entries(request, tag):
+    entries = Entry.list().filter(tags__icontains=f"t:{tag}")
+    return render(request, 'journal/tagged_list.html', {
+        'entries': entries,
+        'tag': tag
     })
