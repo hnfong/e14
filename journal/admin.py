@@ -36,8 +36,13 @@ class EntryAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
     def response_change(self, request, obj):
-        # 🤖🤖🤖
-        if "_continue" not in request.POST and "_saveasnew" not in request.POST:
+        if "_continue" not in request.POST and "_addanother" not in request.POST:
             self.message_user(request, "Entry saved. Returning to entry page.")
-            return redirect('view_slug', slug=obj.slug)
+            return redirect('journal:view_slug', slug=obj.slug)
         return super().response_change(request, obj)
+
+    def response_add(self, request, obj):
+        if "_continue" not in request.POST and "_addanother" not in request.POST:
+            self.message_user(request, "Entry saved. Returning to entry page.")
+            return redirect('journal:view_slug', slug=obj.slug)
+        return super().response_add(request, obj)
