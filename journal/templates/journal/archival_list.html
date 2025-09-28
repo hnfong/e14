@@ -1,0 +1,16 @@
+{% extends "journal/base.html" %}
+
+{% block content %}
+    <h2>Archival</h2>
+    {% for entry in entries %}
+        <div class="entry">
+            <h3>{{ entry.title }}</h3>
+            <div class="meta">{{ entry.created_at|date:"M d, Y" }}</div>
+            {% if entry.media_file %}
+                <div class="media">File: {{ entry.media_file.name }}</div>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>No archival entries yet.</p>
+    {% endfor %}
+{% endblock %}

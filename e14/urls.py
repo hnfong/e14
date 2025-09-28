@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("note/", include("note.urls")),
     path("quotes/", include("quotes.urls")),
+    path('journal/', include('journal.urls')),
     path("", index, name="index"),  # Map root URL to note.views.index
 ]

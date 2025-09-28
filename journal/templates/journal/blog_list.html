@@ -1,0 +1,18 @@
+{% extends "journal/base.html" %}
+
+{% block content %}
+    {% for entry in entries %}
+        <div class="entry">
+            <h2>{{ entry.title }}</h2>
+            <div class="meta">
+                {{ entry.created_at|date:"M d, Y" }} |
+                {% if entry.tags %}{% for tag in entry.tags.split %}<span class="tag">{{ tag }}</span>{% endfor %}{% endif %}
+            </div>
+            <div class="content">
+                {{ entry.content|truncatewords:50|linebreaks }}
+            </div>
+        </div>
+    {% empty %}
+        <p>No blog entries yet.</p>
+    {% endfor %}
+{% endblock %}
