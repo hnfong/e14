@@ -32,7 +32,8 @@
   <p>No entries yet.</p>
  {% endfor %}
   <div>
-      {{ entries.previous_a_start }}Prev{{ entries.previous_a_end }}
-      {{ entries.next_a_start }}Next{{ entries.next_a_end }}
+      <span style="float:left">{{ entries.previous_a_start }}《《{{ entries.previous_a_end }}</span>
+      <span style="float:right">{{ entries.next_a_start }}》》{{ entries.next_a_end }}</span>
+      &nbsp;
   </div>
 {% endblock %}

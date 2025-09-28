@@ -6,32 +6,25 @@
 
 {% block content %}
 <article class="entry-detail">
-  <header>
+  <div class="entry">
    <div class="staff-actions">
 {% if request.user.is_staff %}
     <a href="{% url 'admin:journal_entry_change' entry.id %}">Edit</a>
 {% endif %}
    </div>
-    <h1>{{ entry.title }}</h1>
-    <p class="meta">
-      {{ entry.created_at|date:"M d, Y" }}
-      {% if entry.updated_at != entry.created_at %}
-        (Updated: {{ entry.updated_at|date:"M d, Y" }})
-      {% endif %}
-    </p>
-    {% if entry.tags %}
-      <p class="tags">
-        <strong>Tags:</strong>
-        {% for tag in entry.split_tags %}
-            <a href="{% url 'journal:tagged_entries' tag|slice:'2:' %}">{{ tag|slice:'2:' }}</a>
-        {% endfor %}
-      </p>
+   <h2><a href="{% url 'journal:view_slug' entry.slug %}">{{ entry.title }}</a></h2>
+   <div class="meta">
+    {{ entry.created_at|date:"M d, Y" }}
+    {% if entry.tags %} |
+     {% for tag in entry.tags.split %}
+      <a href="{% url 'journal:tagged_entries' tag|slice:'2:' %}" class="tag">{{ tag|slice:'2:' }}</a>
+     {% endfor %}
     {% endif %}
-  </header>
-
-  <div class="content">
+   </div>
+   <div class="content">
       <div class="markdown-source" style="display: none;">{{ entry.content }}</div>
       <div class="markdown-rendered"></div>
+   </div>
   </div>
 
       {% comment %}
