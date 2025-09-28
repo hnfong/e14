@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'note',
     'quotes',
+    'journal',
 ]
 
 MIDDLEWARE = [
