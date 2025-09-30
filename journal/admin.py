@@ -23,7 +23,8 @@ class EntryAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if not obj.author_id:
             obj.author = request.user
-        if change:  # This is an edit, not a new entry
+
+        if change and obj.entry_type in ("topic", "archive"): # change is true if it's an edit
             original_obj = self.model.objects.get(pk=obj.pk)
             if remove_newlines(original_obj.content) != remove_newlines(obj.content):
                 now = timezone.now().strftime('%Y-%m-%d %H:%M:%S')
