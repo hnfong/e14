@@ -6,7 +6,9 @@ from django.utils import timezone
 
 from . import models
 
-DATETIME_TITLE = re.compile(r"(FB|Karp|CT|NQ) (?P<year>[0-9]{4})-(?P<month>[0-9]+)-(?P<day>[0-9]+)")
+DATETIME_TITLE = re.compile(r"(FB|Karp|CT|THR|NQ) (?P<year>[0-9]{4})-(?P<month>[0-9]+)-(?P<day>[0-9]+)")
+THREADS_US_DATE = re.compile(r"(?P<month>[0-9]+)/(?P<day>[0-9]+)/(?P<year>[0-9]{2})")
+
 
 def remove_newlines(s):
     # Between the django-editor and the browser, sometimes newlines are changed
@@ -21,8 +23,12 @@ class EntryAdmin(admin.ModelAdmin):
     search_fields = ('title', 'content', 'tags')
     prepopulated_fields = {'slug': ('title',)}
     ordering = ['-created_at']
-    fields = ('title', 'slug', 'entry_type', 'content', 'media_file', 'tags', 'ai_slop', 'is_hidden', 'is_public' )
+    fields = ('title', 'slug', 'entry_type', 'content', 'media_file', 'tags', 'ai_slop', 'is_hidden', 'is_public', 'created_at' )
     readonly_fields = ('ai_slop', )
+
+
+    # def get_changeform_initial_data(self, request):
+        # return {'title': 'THR 2025-08-'}
 
     def save_model(self, request, obj, form, change):
         if not obj.author_id:
@@ -39,6 +45,15 @@ class EntryAdmin(admin.ModelAdmin):
 
         if not obj.tags:
             obj.tags = None
+
+        obj.content = obj.content.lstrip()
+        if obj.content.startswith("si.fong"):
+            lines = obj.content.split("\n")
+            if len(lines) > 1 and (m := THREADS_US_DATE.search(lines[1])):
+                obj.title = f"THR 20{m.group('year')}-{m.group('month')}-{m.group('day')}"
+                now_time = timezone.now().strftime('%H:%M:%S')
+                obj.slug = obj.title.replace(' ', '-').lower() + "--" + str(now_time)
+                obj.content = "\r\n\r\n".join(line.strip() for line in lines[2:])
 
         if m := DATETIME_TITLE.search(obj.title):
             obj.created_at = obj.created_at.replace(

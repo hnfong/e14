@@ -24,21 +24,18 @@
    <div class="content">
       <div class="markdown-source" style="display: none;">{{ entry.content }}</div>
       <div class="markdown-rendered"></div>
+    {% if entry.media_file %}
+      <div class="media">
+        {% if entry.media_file.url.lower|slice:"-4:" == ".jpg" or entry.media_file.url.lower|slice:"-4:" == ".png" or entry.media_file.url.lower|slice:"-5:" == ".jpeg" %}
+          <img src="{{ entry.media_file.url }}" alt="attached image" style="max-width: 100%;">
+        {% else %}
+          <a href="{{ entry.media_file.url }}" target="_blank">Download attached file</a>
+        {% endif %}
+      </div>
+    {% endif %}
    </div>
   </div>
 
-      {% comment %}
-  {% if entry.media_file %}
-    <div class="media">
-      <strong>Media:</strong>
-      {% if entry.media_file.url.endswith('.jpg') or entry.media_file.url.endswith('.png') or entry.media_file.url.endswith('.jpeg') %}
-        <img src="{{ entry.media_file.url }}" alt="Attached media" style="max-width: 100%;">
-      {% else %}
-        <a href="{{ entry.media_file.url }}" target="_blank">Download attached file</a>
-      {% endif %}
-    </div>
-  {% endif %}
-      {% endcomment %}
 
   <hr>
   <a href="{% url 'journal:blog_list' %}">← Back</a><!-- TODO: back depending on type -->
