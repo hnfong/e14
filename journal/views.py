@@ -1,5 +1,8 @@
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
+
 from . import models
+
 
 from . import dj
 
@@ -25,6 +28,15 @@ def tagged_entries(request, tag):
     return render(request, 'journal/list.html', {
         'entries': entries,
         'tag': tag
+    })
+
+def search(request):
+    query = request.GET.get("q")
+    entries = models.Entry.list().filter(Q(tags__icontains=query) | Q(content__icontains=query) | Q(title__icontains=query))
+    entries = dj.paginate(entries, 10, request)
+    return render(request, 'journal/list.html', {
+        'entries': entries,
+        'orig_query': query,
     })
 
 def entry_slug(request, slug):
