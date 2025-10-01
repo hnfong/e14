@@ -8,7 +8,11 @@ from . import models
 
 DATETIME_TITLE = re.compile(r"(FB|Karp|CT|THR|NQ) (?P<year>[0-9]{4})-(?P<month>[0-9]+)-(?P<day>[0-9]+)")
 THREADS_US_DATE = re.compile(r"(?P<month>[0-9]+)/(?P<day>[0-9]+)/(?P<year>[0-9]{2})")
+FACEBOOK_DATE = re.compile(r"(?P<month_eng>[a-zA-Z]+) (?P<day>[0-9]+)")
 
+ENGLISH = "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".lower().split()
+def monthEnglishToInt(monthEnglish):
+    return ENGLISH.index(monthEnglish[:3].lower()) + 1
 
 def remove_newlines(s):
     # Between the django-editor and the browser, sometimes newlines are changed
@@ -28,7 +32,7 @@ class EntryAdmin(admin.ModelAdmin):
 
 
     # def get_changeform_initial_data(self, request):
-        # return {'title': 'THR 2025-08-'}
+        # return {'title': 'Karp 2025-07-'}
 
     def save_model(self, request, obj, form, change):
         if not obj.author_id:
@@ -51,6 +55,17 @@ class EntryAdmin(admin.ModelAdmin):
             lines = obj.content.split("\n")
             if len(lines) > 1 and (m := THREADS_US_DATE.search(lines[1])):
                 obj.title = f"THR 20{m.group('year')}-{m.group('month')}-{m.group('day')}"
+                now_time = timezone.now().strftime('%H:%M:%S')
+                obj.slug = obj.title.replace(' ', '-').lower() + "--" + str(now_time)
+                obj.content = "\r\n\r\n".join(line.strip() for line in lines[2:])
+
+        if obj.content.startswith("賞鯉專家"):
+            print("ok 1")
+            lines = obj.content.split("\n")
+            if len(lines) > 1 and (m := FACEBOOK_DATE.search(lines[1])):
+                import datetime
+                current_year_back = (timezone.now() - datetime.timedelta(days=45)).year
+                obj.title = f"Karp {current_year_back}-{'%02d' % monthEnglishToInt(m.group('month_eng'))}-{'%02d' % int(m.group('day'))}"
                 now_time = timezone.now().strftime('%H:%M:%S')
                 obj.slug = obj.title.replace(' ', '-').lower() + "--" + str(now_time)
                 obj.content = "\r\n\r\n".join(line.strip() for line in lines[2:])
