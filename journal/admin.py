@@ -1,8 +1,12 @@
+import re
+
 from django.contrib import admin
 from django.shortcuts import redirect
 from django.utils import timezone
 
 from . import models
+
+DATETIME_TITLE = re.compile(r"(FB|Karp|CT|NQ) (?P<year>[0-9]{4})-(?P<month>[0-9]+)-(?P<day>[0-9]+)")
 
 def remove_newlines(s):
     # Between the django-editor and the browser, sometimes newlines are changed
@@ -32,8 +36,17 @@ class EntryAdmin(admin.ModelAdmin):
 
         # Add a prefix to the tags so it's easier to just search for the tag in a generic search bar
         obj.tags = " ".join(f"t:{x}" if not x.startswith("t:") else x for x in (obj.tags or "").split() if x)
+
         if not obj.tags:
             obj.tags = None
+
+        if m := DATETIME_TITLE.search(obj.title):
+            obj.created_at = obj.created_at.replace(
+                year=int(m.group('year')),
+                month=int(m.group('month')),
+                day=int(m.group('day'))
+            )
+
         super().save_model(request, obj, form, change)
 
     def response_change(self, request, obj):
