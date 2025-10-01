@@ -7,3 +7,5 @@ cd ~/e14-backup
 ssh e14@siyeah.com 'bzip2 -c ~/e14/db.sqlite3 > db.sqlite3.bz2'
 scp -C e14@siyeah.com:~/db.sqlite3.bz2 .
 mv db.sqlite3.bz2 db.sqlite3-`date +%s`.bz2
+
+rsync -aH e14@siyeah.com:~/e14/media .
