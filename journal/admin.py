@@ -56,18 +56,17 @@ class EntryAdmin(admin.ModelAdmin):
             if len(lines) > 1 and (m := THREADS_US_DATE.search(lines[1])):
                 obj.title = f"THR 20{m.group('year')}-{m.group('month')}-{m.group('day')}"
                 now_time = timezone.now().strftime('%H:%M:%S')
-                obj.slug = obj.title.replace(' ', '-').lower() + "--" + str(now_time)
+                obj.slug = obj.title.replace(' ', '-').lower() + "--" + str(now_time).replace(":", "-")
                 obj.content = "\r\n\r\n".join(line.strip() for line in lines[2:])
 
         if obj.content.startswith("賞鯉專家"):
-            print("ok 1")
             lines = obj.content.split("\n")
             if len(lines) > 1 and (m := FACEBOOK_DATE.search(lines[1])):
                 import datetime
                 current_year_back = (timezone.now() - datetime.timedelta(days=45)).year
                 obj.title = f"Karp {current_year_back}-{'%02d' % monthEnglishToInt(m.group('month_eng'))}-{'%02d' % int(m.group('day'))}"
                 now_time = timezone.now().strftime('%H:%M:%S')
-                obj.slug = obj.title.replace(' ', '-').lower() + "--" + str(now_time)
+                obj.slug = obj.title.replace(' ', '-').lower() + "--" + str(now_time).replace(":", "-")
                 obj.content = "\r\n\r\n".join(line.strip() for line in lines[2:])
 
         if m := DATETIME_TITLE.search(obj.title):
