@@ -13,7 +13,7 @@ import re
 import sys
 
 DATE_PREFIXES = ('Jan ', 'Feb ', 'Mar ', 'Apr ', 'May ', 'Jun ', 'Jul ', 'Aug ', 'Sep ', 'Oct ', 'Nov ', 'Dec ')
-IRREGULARITIES = {'July ': 'Jul ', 'October ': 'Oct ', 'November ': 'Nov ', 'December ': 'Dec '}
+IRREGULARITIES = {'June ': 'Jun ', 'July ': 'Jul ', 'October ': 'Oct ', 'November ': 'Nov ', 'December ': 'Dec '}
 
 CURRENT_YEAR = None
 
@@ -96,14 +96,16 @@ def parse_threads_entries(text):
                 if line.startswith(dpk):
                     line = line.replace(dpk, dpv, 1)
 
-            if line in ("si.fong", ):
+            if line in ("si.fong", "si.fong"):
                 if current_date:
                     yield(current_date, current_content)
                     current_date = None
                     current_content = []
+                else:
+                    MANUAL_CHECK("No date", current_content)
 
             # Detect date lines
-            if re.match(r'[0-9][0-9]\/[0-9][0-9]\/[0-9][0-9][0-9]', line):
+            if re.match(r'[0-9][0-9]\/[0-9][0-9]\/[0-9][0-9][0-9][0-9]', line) or re.match(r'[0-9][0-9]\/[0-9][0-9]\/[0-9][0-9]', line):
                 if last_line not in ("si.fong", ):
                     MANUAL_CHECK("Misparse separator", [last_line, line, current_content])
 
@@ -118,7 +120,7 @@ def parse_threads_entries(text):
 
     result = []
     for ds, content in generator(lines):
-        dt = datetime.strptime(ds, "%m/%d/%Y").replace(hour=19, minute=0, second=0)
+        dt = try_parse_date(["%m/%d/%Y", "%m/%d/%y"], ds).replace(hour=19, minute=0, second=0)
         joined = '\n'.join(content[2:])
         result.append((dt, f"THR {content[0]} {content[1]}", joined))
         if len(joined) > 9999:
@@ -147,7 +149,7 @@ def parse_blog_entries(text):
                 if current_date is not None:
                     entries.append((
                         current_date,
-                        current_title.strip() if current_title else '',
+                        "CT " + current_title.strip() if current_title else '',
                         '\n'.join(current_content).strip()
                     ))
 
@@ -171,7 +173,7 @@ def parse_blog_entries(text):
     if current_date is not None:
         entries.append((
             current_date,
-            current_title.strip() if current_title else '',
+            "CT " + current_title.strip() if current_title else '',
             '\n'.join(current_content).strip()
         ))
 
@@ -184,6 +186,7 @@ class Command(BaseCommand):
         parser.add_argument('--basedir', type=str, required=True, help='Base directory path')
         parser.add_argument('--user', type=str, required=True, help='Author username')
         parser.add_argument('--year', type=int, required=True, help='Year to process')
+        parser.add_argument('--no_save', default=False, action='store_true', help='Whether to actually save')
 
     @transaction.atomic
     def handle(self, *args, **options):
@@ -194,6 +197,10 @@ class Command(BaseCommand):
         CURRENT_YEAR = int(options["year"])
         username = options["user"]
         User = get_user_model()
+
+        should_save = not options["no_save"]
+
+        print("should save:", should_save)
 
         try:
             user = User.objects.get(username=username)
@@ -215,7 +222,10 @@ class Command(BaseCommand):
             e.updated_at = entry[0]
             e.plain_text = True
 
-            e.save()
+            if should_save:
+                e.save()
 
 
 
+
+        print("should save:", should_save)
