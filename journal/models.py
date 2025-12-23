@@ -2,6 +2,7 @@ from django.db import models
 
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db.models import Q
 
 class Entry(models.Model):
     ENTRY_TYPES = (
@@ -34,6 +35,8 @@ class Entry(models.Model):
     # Used to store any AI generated stuff
     ai_slop = models.TextField(editable=False, null=True, blank=True)
 
+    plaintext = models.BooleanField(default=False)
+
     def split_tags(self):
         return (self.tags or "").split()
 
@@ -41,9 +44,15 @@ class Entry(models.Model):
         return f"Journal:{self.id}<{self.title[:20] or self.content[:20]}>"
 
     @staticmethod
-    def list(is_public=None, ordering=None):
+    def list(is_public=None, ordering=None, viewer=None):
         if is_public is None:
             is_public = True
         if ordering is None:
             ordering = "-created_at"
-        return Entry.objects.filter(is_hidden=False).filter(is_public=is_public).order_by(ordering)
+
+        if viewer is not None and viewer.is_authenticated:
+            q = Q(is_public=is_public) | Q(author=viewer)
+        else:
+            q = Q(is_public=is_public)
+
+        return Entry.objects.filter(is_hidden=False).filter(q).order_by(ordering)

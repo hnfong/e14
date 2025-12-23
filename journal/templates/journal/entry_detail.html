@@ -22,8 +22,12 @@
     {% endif %}
    </div>
    <div class="content">
+    {% if entry.plain_text %}
+      <div class="plaintext" style="display: none;">{{ entry.content|linebreaksbr }}</div>
+    {% else %}
       <div class="markdown-source" style="display: none;">{{ entry.content }}</div>
       <div class="markdown-rendered"></div>
+    {% endif %}
     {% if entry.media_file %}
       <div class="media">
         {% if entry.media_file.url.lower|slice:"-4:" == ".jpg" or entry.media_file.url.lower|slice:"-4:" == ".png" or entry.media_file.url.lower|slice:"-5:" == ".jpeg" %}
