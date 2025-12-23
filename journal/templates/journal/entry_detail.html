@@ -23,7 +23,7 @@
    </div>
    <div class="content">
     {% if entry.plain_text %}
-      <div class="plaintext" style="display: none;">{{ entry.content|linebreaksbr }}</div>
+      <div class="plaintext">{{ entry.content|linebreaksbr }}</div>
     {% else %}
       <div class="markdown-source" style="display: none;">{{ entry.content }}</div>
       <div class="markdown-rendered"></div>

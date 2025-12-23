@@ -27,7 +27,7 @@ class EntryAdmin(admin.ModelAdmin):
     search_fields = ('title', 'content', 'tags')
     prepopulated_fields = {'slug': ('title',)}
     ordering = ['-created_at']
-    fields = ('title', 'slug', 'entry_type', 'content', 'media_file', 'tags', 'ai_slop', 'is_hidden', 'is_public', 'created_at' )
+    fields = ('title', 'slug', 'entry_type', 'content', 'media_file', 'tags', 'ai_slop', 'is_hidden', 'is_public', 'created_at', 'plain_text' )
     readonly_fields = ('ai_slop', )
 
 
