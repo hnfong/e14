@@ -35,7 +35,7 @@ class Entry(models.Model):
     # Used to store any AI generated stuff
     ai_slop = models.TextField(editable=False, null=True, blank=True)
 
-    plaintext = models.BooleanField(default=False)
+    plain_text = models.BooleanField(default=False)
 
     def split_tags(self):
         return (self.tags or "").split()
