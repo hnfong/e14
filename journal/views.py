@@ -20,7 +20,7 @@ def entry_list(request, typ):
 @staff_required
 def print_year(request, year):
     entries = models.Entry.list(viewer=request.user, ordering="created_at").filter(created_at__gte = timezone.datetime(year, 1, 1)).filter(created_at__lt = timezone.datetime(year + 1, 1, 1))
-    return render(request, f'journal/print.html', { 'entries': entries, })
+    return render(request, f'journal/print.html', { 'entries': entries, 'year': year })
 
 def blog_list(request):
     return entry_list(request, 'blog')
