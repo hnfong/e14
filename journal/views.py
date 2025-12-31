@@ -1,5 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
+from django.utils import timezone
+from django.contrib.admin.views.decorators import staff_member_required as staff_required
 
 from . import models
 
@@ -14,6 +16,11 @@ def entry_list(request, typ):
         'entries': entries,
         'active_tab': typ
     })
+
+@staff_required
+def print_year(request, year):
+    entries = models.Entry.list(viewer=request.user, ordering="created_at").filter(created_at__gte = timezone.datetime(year, 1, 1)).filter(created_at__lt = timezone.datetime(year + 1, 1, 1))
+    return render(request, f'journal/print.html', { 'entries': entries, })
 
 def blog_list(request):
     return entry_list(request, 'blog')

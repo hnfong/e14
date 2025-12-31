@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>隨筆 - {% block subtitle %}呢度嗰度{% endblock subtitle %}</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--grey-900);
+            color: var(--grey-400);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        div.page-content {
+            margin: 1em;
+        }
+        h2 {
+        margin: 0.5em 0 0 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-content">
+         {% for entry in entries %}
+          <div class="entry">
+           <h2><a href="{% url 'journal:view_slug' entry.slug %}">{{ entry.title }}</a></h2>
+           <div class="content">
+            <div>Date: {{ entry.created_at }}{% if entry.created_at != entry.updated_at %} ({{ entry.updated_at }}){% endif %} </div>
+            <div>{{ entry.content|linebreaksbr }}</div>
+            {% if entry.media_file %}
+              <div class="media">
+                {% if entry.media_file.url.lower|slice:"-4:" == ".jpg" or entry.media_file.url.lower|slice:"-4:" == ".png" or entry.media_file.url.lower|slice:"-5:" == ".jpeg" %}
+                  <img src="{{ entry.media_file.url }}" alt="attached image" style="max-width: 100%;">
+                {% else %}
+                  <a href="{{ entry.media_file.url }}" target="_blank">Download attached file</a>
+                {% endif %}
+              </div>
+            {% endif %}
+           </div>
+          </div>
+         {% empty %}
+          <p>未有嘢</p>
+         {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

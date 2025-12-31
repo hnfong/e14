@@ -11,4 +11,5 @@ urlpatterns = [
     path('tag/<str:tag>/', views.tagged_entries, name='tagged_entries'),
     path('view/<str:slug>/', views.entry_slug, name='view_slug'),
     path('view/<int:entry_id>/', views.entry_id, name='view_id'),
+    path('print/<int:year>', views.print_year, name='print_year'),
 ]
