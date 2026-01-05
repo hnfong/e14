@@ -8,6 +8,22 @@ def uuid_string():
 MODEL_CHOICES=["gemma-3-27B", "Kimi-K2", "QwenLong-L1.5-30B-A3B"]
 
 class TextInferenceRequest(models.Model):
+    STATUS_PENDING = 0
+    STATUS_LOCKED = 10
+    STATUS_FINALIZED_LINE = 99
+    STATUS_DONE = 100
+    STATUS_CANCELLED = 101
+    STATUS_ERROR = 102
+
+    STATUS_CHOICES = [
+            (STATUS_PENDING, "STATUS_PENDING"),
+            (STATUS_LOCKED, "STATUS_LOCKED"),
+            (STATUS_FINALIZED_LINE, "STATUS_FINALIZED_LINE"),
+            (STATUS_DONE, "STATUS_DONE"),
+            (STATUS_CANCELLED, "STATUS_CANCELLED"),
+            (STATUS_ERROR, "STATUS_ERROR"),
+    ]
+
     uuid = models.CharField(max_length=36, unique=True, default=uuid_string)
     priority = models.IntegerField(default=50)
     requester = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -24,14 +40,8 @@ class TextInferenceRequest(models.Model):
     result = models.TextField(blank=True, default="")
     logs = models.TextField(blank=True, default="")
     secrets = models.TextField(blank=True, default="") # Generic field used for authentication later. Leave blank for now
-    status = models.IntegerField(default=0)
 
-    STATUS_PENDING = 0
-    STATUS_LOCKED = 10
-    STATUS_FINALIZED_LINE = 99
-    STATUS_DONE = 100
-    STATUS_CANCELLED = 101
-    STATUS_ERROR = 102
+    status = models.IntegerField(default=0, choices=STATUS_CHOICES)
 
     def __str__(self):
         return f"<TextInferenceRequest - {self.uuid} ({self.created})>"
