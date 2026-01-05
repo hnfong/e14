@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'note',
     'quotes',
     'journal',
+    'batchai',
 ]
 
 MIDDLEWARE = [
