@@ -31,6 +31,17 @@ def html_list(request):
     items = models.TextInferenceRequest.list().filter(requester=request.user).order_by("-created")
     return render(request, "batchai/list.html", { "items": items })
 
+def submit_request(request):
+    if request.method == "POST":
+        request_obj = models.TextInferenceRequest()
+        request_obj.requester = request.user
+        request_obj.status = models.TextInferenceRequest.STATUS_PENDING
+        request_obj.user_prompt = request.POST.get("user_prompt")
+        request_obj.llm_model = request.POST.get("llm_model")
+        request_obj.max_tokens = int(request.POST.get("max_tokens") or "0")
+        request_obj.purpose = request.POST.get("purpose") or ""
+        request_obj.save()
+    return render(request, "batchai/submit.html", {})
 
 # FIXME: use some other auth method.
 @csrf_exempt

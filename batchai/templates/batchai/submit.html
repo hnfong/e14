@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<!-- 🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖 DeepSeek Generated 🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖 -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Prompt Generator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .case-selector {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        select, input, button {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        button.secondary {
+            background: #95a5a6;
+        }
+
+        button.secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .panel h2 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 18px;
+        }
+
+        .form-container {
+            min-height: 400px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        textarea, input[type="text"], input[type="number"], input[type="date"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 16px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .preview-container {
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview {
+            flex: 1;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .preview-placeholder {
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .syntax-help {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .syntax-help h4 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .syntax-help code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .syntax-help ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .syntax-help li {
+            margin-bottom: 5px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1001;
+        }
+
+        .case-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .case-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>LLM Prompt Generator</h1>
+
+    <div class="header">
+        <div class="case-selector">
+            <select id="caseSelect">
+                <option value="">Select a case...</option>
+            </select>
+        </div>
+        <button id="newCaseBtn">New Case</button>
+        <button id="editCaseBtn" class="secondary">Edit Case</button>
+        <button id="deleteCaseBtn" class="secondary">Delete Case</button>
+        <button id="exportBtn" class="secondary">Export</button>
+        <button id="importBtn" class="secondary">Import</button>
+    </div>
+
+    <div class="main-container">
+        <div class="panel form-container">
+            <h2>Parameters</h2>
+            <div id="formArea">
+                <div class="form-placeholder">Select or create a case to begin</div>
+            </div>
+        </div>
+
+        <div class="panel preview-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2>Generated Prompt</h2>
+                <button id="copyBtn">Copy to Clipboard</button>
+                <button id="submitBtn">Submit</button>
+            </div>
+            <div id="preview" class="preview">
+                <div class="preview-placeholder">Generated prompt will appear here</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Case Editor Modal -->
+    <div id="editorModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">New Case</h2>
+            <div class="form-group">
+                <label for="caseName">Case Name</label>
+                <input type="text" id="caseName" placeholder="e.g., Summarize Legal Judgment">
+            </div>
+            <div class="form-group">
+                <label for="caseTemplate">Template</label>
+                <textarea id="caseTemplate" rows="10" placeholder="Enter your prompt template with placeholders like ${text:textarea}"></textarea>
+            </div>
+
+            <div class="syntax-help">
+                <h4>Template Syntax Help</h4>
+                <p>Use <code>${parameterName:type}</code> to create input fields:</p>
+                <ul>
+                    <li><code>${text:text}</code> - Single line text input</li>
+                    <li><code>${content:textarea}</code> - Multi-line text area</li>
+                    <li><code>${count:number}</code> - Number input</li>
+                    <li><code>${date:date}</code> - Date picker</li>
+                    <li><code>${option:select:opt1,opt2,opt3}</code> - Dropdown with options</li>
+                    <li><code>${flag:checkbox}</code> - Checkbox</li>
+                    <li>Add default values: <code>${name:text:John}</code></li>
+                </ul>
+                <p><strong>Example:</strong> Summarize this: ${text:textarea}. Focus on ${aspect:select:facts,issues,ruling}. Make it ${length:number:200} words.</p>
+            </div>
+
+            <div class="modal-buttons">
+                <button id="saveCaseBtn">Save Case</button>
+                <button id="cancelBtn" class="secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div id="importModal" class="modal">
+        <div class="modal-content">
+            <h2>Import Cases</h2>
+            <div class="form-group">
+                <label for="importData">Paste JSON data:</label>
+                <textarea id="importData" rows="10" placeholder='[{"name": "Case 1", "template": "..."}]'></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button id="importConfirmBtn">Import</button>
+                <button id="importCancelBtn" class="secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Case List Modal for Delete -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h2>Delete Case</h2>
+            <div class="case-list" id="deleteCaseList">
+                <!-- Cases will be listed here -->
+            </div>
+            <div class="modal-buttons">
+                <button id="deleteConfirmBtn">Delete Selected</button>
+                <button id="deleteCancelBtn" class="secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Prompt Generator | All data is stored locally in your browser</p>
+    </div>
+
+    <div id="notification" class="notification">Copied to clipboard!</div>
+
+    <form method="post" id="submitForm" action="{% url 'batchai:submit_request' %}">
+        {% csrf_token %}
+        <input type="hidden" name="user_prompt">
+        <input type="hidden" name="llm_model">
+        <input type="hidden" name="max_tokens">
+        <input type="hidden" name="purpose">
+    </form>
+
+    <script>
+        // State management
+        const state = {
+            cases: [],
+            currentCaseId: null,
+            formValues: {}
+        };
+
+        // DOM Elements
+        const elements = {
+            caseSelect: document.getElementById('caseSelect'),
+            formArea: document.getElementById('formArea'),
+            preview: document.getElementById('preview'),
+            newCaseBtn: document.getElementById('newCaseBtn'),
+            editCaseBtn: document.getElementById('editCaseBtn'),
+            deleteCaseBtn: document.getElementById('deleteCaseBtn'),
+            exportBtn: document.getElementById('exportBtn'),
+            importBtn: document.getElementById('importBtn'),
+            copyBtn: document.getElementById('copyBtn'),
+            submitBtn: document.getElementById('submitBtn'),
+            editorModal: document.getElementById('editorModal'),
+            importModal: document.getElementById('importModal'),
+            deleteModal: document.getElementById('deleteModal'),
+            notification: document.getElementById('notification')
+        };
+
+        // Storage keys
+        const STORAGE_KEYS = {
+            CASES: 'llmPromptCases',
+            LAST_SELECTED: 'lastSelectedCaseId'
+        };
+
+        // Initialize
+        function init() {
+            loadCases();
+            setupEventListeners();
+            renderCaseSelector();
+
+            // Select last used case if available
+            const lastCaseId = localStorage.getItem(STORAGE_KEYS.LAST_SELECTED);
+            if (lastCaseId && state.cases.find(c => c.id === lastCaseId)) {
+                selectCase(lastCaseId);
+            }
+        }
+
+        // Load cases from localStorage
+        function loadCases() {
+            const saved = localStorage.getItem(STORAGE_KEYS.CASES);
+            if (saved) {
+                try {
+                    state.cases = JSON.parse(saved);
+                } catch (e) {
+                    console.error('Failed to parse saved cases:', e);
+                    state.cases = [];
+                }
+            }
+
+            // Add default examples if no cases exist
+            if (state.cases.length === 0) {
+                state.cases = [
+                    {
+                        id: '1',
+                        name: 'Summarize Text',
+                        template: 'Please summarize the following text in ${length:number:200} words:\n\n${text:textarea}'
+                    },
+                    {
+                        id: '2',
+                        name: 'Grammar Check',
+                        template: 'Check the grammar of this text and suggest corrections:\n\n${text:textarea}'
+                    },
+                    {
+                        id: '3',
+                        name: 'Language Learning',
+                        template: 'Create ${count:number:5} example sentences in ${language:select:Cantonese,Mandarin,Japanese} using the word "${word:text}". Include ${includeTranslation:checkbox} translation.'
+                    }
+                ];
+                saveCases();
+            }
+        }
+
+        // Save cases to localStorage
+        function saveCases() {
+            localStorage.setItem(STORAGE_KEYS.CASES, JSON.stringify(state.cases));
+        }
+
+        // Parse template to extract parameters
+        function parseTemplate(template) {
+            const paramRegex = /\$\{([^}]+)\}/g;
+            const params = [];
+            let match;
+
+            while ((match = paramRegex.exec(template)) !== null) {
+                const fullMatch = match[1];
+                const parts = fullMatch.split(':');
+
+                if (parts.length >= 2) {
+                    const param = {
+                        name: parts[0],
+                        type: parts[1],
+                        options: [],
+                        defaultValue: ''
+                    };
+
+                    // Parse options or default value
+                    if (parts.length === 3) {
+                        if (parts[1] === 'select') {
+                            param.options = parts[2].split(',');
+                        } else {
+                            param.defaultValue = parts[2];
+                        }
+                    } else if (parts.length > 3) {
+                        // Handle select with default: select:opt1,opt2,opt3:default
+                        if (parts[1] === 'select') {
+                            const optionsAndDefault = parts.slice(2).join(':').split(':');
+                            param.options = optionsAndDefault[0].split(',');
+                            if (optionsAndDefault[1]) {
+                                param.defaultValue = optionsAndDefault[1];
+                            }
+                        }
+                    }
+
+                    params.push(param);
+                }
+            }
+
+            return params;
+        }
+
+        // Generate form from parameters
+        function generateForm(params) {
+            elements.formArea.innerHTML = '';
+
+            if (params.length === 0) {
+                elements.formArea.innerHTML = '<div class="form-placeholder">No parameters defined in template</div>';
+                return;
+            }
+
+            params.forEach(param => {
+                const formGroup = document.createElement('div');
+                formGroup.className = 'form-group';
+
+                const label = document.createElement('label');
+                label.textContent = param.name.charAt(0).toUpperCase() + param.name.slice(1);
+                label.htmlFor = param.name;
+
+                let input;
+
+                switch (param.type) {
+                    case 'textarea':
+                        input = document.createElement('textarea');
+                        input.placeholder = `Enter ${param.name}...`;
+                        break;
+
+                    case 'number':
+                        input = document.createElement('input');
+                        input.type = 'number';
+                        break;
+
+                    case 'date':
+                        input = document.createElement('input');
+                        input.type = 'date';
+                        break;
+
+                    case 'select':
+                        input = document.createElement('select');
+                        param.options.forEach(option => {
+                            const optionEl = document.createElement('option');
+                            optionEl.value = option;
+                            optionEl.textContent = option;
+                            input.appendChild(optionEl);
+                        });
+                        break;
+
+                    case 'checkbox':
+                        input = document.createElement('input');
+                        input.type = 'checkbox';
+                        input.id = param.name;
+                        // For checkbox, we wrap it differently
+                        formGroup.innerHTML = '';
+                        const container = document.createElement('div');
+                        container.style.display = 'flex';
+                        container.style.alignItems = 'center';
+                        container.style.gap = '10px';
+
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = param.name;
+                        checkbox.name = param.name;
+
+                        const checkboxLabel = document.createElement('label');
+                        checkboxLabel.textContent = param.name.charAt(0).toUpperCase() + param.name.slice(1);
+                        checkboxLabel.htmlFor = param.name;
+                        checkboxLabel.style.marginBottom = '0';
+
+                        container.appendChild(checkbox);
+                        container.appendChild(checkboxLabel);
+                        formGroup.appendChild(container);
+                        input = checkbox;
+                        break;
+
+                    default: // text
+                        input = document.createElement('input');
+                        input.type = 'text';
+                        input.placeholder = `Enter ${param.name}...`;
+                }
+
+                if (param.type !== 'checkbox') {
+                    input.id = param.name;
+                    input.name = param.name;
+
+                    // Set default value if exists
+                    if (param.defaultValue) {
+                        input.value = param.defaultValue;
+                        state.formValues[param.name] = param.defaultValue;
+                    }
+
+                    formGroup.appendChild(label);
+                    formGroup.appendChild(input);
+                }
+
+                elements.formArea.appendChild(formGroup);
+
+                // Add event listener
+                if (input) {
+                    input.addEventListener('input', updatePreview);
+                    input.addEventListener('change', updatePreview);
+
+                    // Initialize form value
+                    if (param.type === 'checkbox') {
+                        state.formValues[param.name] = param.defaultValue === 'true' || false;
+                        input.checked = state.formValues[param.name];
+                    } else if (!param.defaultValue) {
+                        state.formValues[param.name] = '';
+                    }
+                }
+            });
+        }
+
+        // Update preview with current form values
+        function updatePreview() {
+            const currentCase = state.cases.find(c => c.id === state.currentCaseId);
+            if (!currentCase) return;
+
+            // Update form values from inputs
+            const params = parseTemplate(currentCase.template);
+            params.forEach(param => {
+                const input = document.querySelector(`[name="${param.name}"]`);
+                if (input) {
+                    if (param.type === 'checkbox') {
+                        state.formValues[param.name] = input.checked;
+                    } else {
+                        state.formValues[param.name] = input.value;
+                    }
+                }
+            });
+
+            // Replace placeholders in template
+            let previewText = currentCase.template;
+            const paramRegex = /\$\{([^}]+)\}/g;
+
+            previewText = previewText.replace(paramRegex, (match, paramDef) => {
+                const paramName = paramDef.split(':')[0];
+                return state.formValues[paramName] !== undefined ?
+                       String(state.formValues[paramName]) :
+                       `[${paramName}]`;
+            });
+
+            elements.preview.textContent = previewText;
+        }
+
+        // Render case selector dropdown
+        function renderCaseSelector() {
+            elements.caseSelect.innerHTML = '<option value="">Select a case...</option>';
+
+            state.cases.forEach(caseItem => {
+                const option = document.createElement('option');
+                option.value = caseItem.id;
+                option.textContent = caseItem.name;
+                elements.caseSelect.appendChild(option);
+            });
+        }
+
+        // Select a case
+        function selectCase(caseId) {
+            state.currentCaseId = caseId;
+            localStorage.setItem(STORAGE_KEYS.LAST_SELECTED, caseId);
+
+            const selectedCase = state.cases.find(c => c.id === caseId);
+            if (!selectedCase) return;
+
+            elements.caseSelect.value = caseId;
+
+            // Parse template and generate form
+            const params = parseTemplate(selectedCase.template);
+            generateForm(params);
+
+            // Update preview
+            updatePreview();
+
+            // Enable/disable buttons
+            elements.editCaseBtn.disabled = false;
+            elements.deleteCaseBtn.disabled = false;
+        }
+
+        // Show notification
+        function showNotification(message) {
+            elements.notification.textContent = message;
+            elements.notification.style.display = 'block';
+            setTimeout(() => {
+                elements.notification.style.display = 'none';
+            }, 2000);
+        }
+
+        // 🧑🏻‍💻🧑🏻‍💻🧑🏻‍💻
+        function submitToServer(selectedCase, userPrompt) {
+            const frm = document.getElementById("submitForm");
+            frm.elements['user_prompt'].value = userPrompt;
+            frm.elements['llm_model'].value = selectedCase.defaultModel || 'gemma-3-27B';
+            frm.elements['max_tokens'].value = selectedCase.defaultTokens || '8000';
+            frm.elements['purpose'].value = selectedCase.name;
+            frm.submit();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Case selection
+            elements.caseSelect.addEventListener('change', (e) => {
+                if (e.target.value) {
+                    selectCase(e.target.value);
+                }
+            });
+
+            // New case button
+            elements.newCaseBtn.addEventListener('click', () => {
+                document.getElementById('modalTitle').textContent = 'New Case';
+                document.getElementById('caseName').value = '';
+                document.getElementById('caseTemplate').value = '';
+                elements.editorModal.style.display = 'flex';
+            });
+
+            // Edit case button
+            elements.editCaseBtn.addEventListener('click', () => {
+                if (!state.currentCaseId) return;
+
+                const currentCase = state.cases.find(c => c.id === state.currentCaseId);
+                if (!currentCase) return;
+
+                document.getElementById('modalTitle').textContent = 'Edit Case';
+                document.getElementById('caseName').value = currentCase.name;
+                document.getElementById('caseTemplate').value = currentCase.template;
+                elements.editorModal.style.display = 'flex';
+            });
+
+            // Save case button
+            document.getElementById('saveCaseBtn').addEventListener('click', () => {
+                const name = document.getElementById('caseName').value.trim();
+                const template = document.getElementById('caseTemplate').value.trim();
+
+                if (!name || !template) {
+                    alert('Please enter both name and template');
+                    return;
+                }
+
+                if (document.getElementById('modalTitle').textContent === 'New Case') {
+                    // Create new case
+                    const newCase = {
+                        id: Date.now().toString(),
+                        name,
+                        template
+                    };
+                    state.cases.push(newCase);
+                    state.currentCaseId = newCase.id;
+                } else {
+                    // Update existing case
+                    const index = state.cases.findIndex(c => c.id === state.currentCaseId);
+                    if (index !== -1) {
+                        state.cases[index].name = name;
+                        state.cases[index].template = template;
+                    }
+                }
+
+                saveCases();
+                renderCaseSelector();
+                selectCase(state.currentCaseId);
+                elements.editorModal.style.display = 'none';
+                showNotification('Case saved successfully');
+            });
+
+            // Cancel button
+            document.getElementById('cancelBtn').addEventListener('click', () => {
+                elements.editorModal.style.display = 'none';
+            });
+
+            // Delete case button
+            elements.deleteCaseBtn.addEventListener('click', () => {
+                elements.deleteModal.style.display = 'flex';
+                const deleteList = document.getElementById('deleteCaseList');
+                deleteList.innerHTML = '';
+
+                state.cases.forEach(caseItem => {
+                    const div = document.createElement('div');
+                    div.className = 'case-item';
+
+                    const label = document.createElement('label');
+                    label.style.display = 'flex';
+                    label.style.alignItems = 'center';
+                    label.style.gap = '10px';
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.value = caseItem.id;
+                    checkbox.checked = caseItem.id === state.currentCaseId;
+
+                    const span = document.createElement('span');
+                    span.textContent = caseItem.name;
+
+                    label.appendChild(checkbox);
+                    label.appendChild(span);
+                    div.appendChild(label);
+                    deleteList.appendChild(div);
+                });
+            });
+
+            // Delete confirm button
+            document.getElementById('deleteConfirmBtn').addEventListener('click', () => {
+                const checkboxes = document.querySelectorAll('#deleteCaseList input[type="checkbox"]:checked');
+                const idsToDelete = Array.from(checkboxes).map(cb => cb.value);
+
+                if (idsToDelete.length === 0) {
+                    alert('Please select at least one case to delete');
+                    return;
+                }
+
+                // Remove cases
+                state.cases = state.cases.filter(c => !idsToDelete.includes(c.id));
+
+                // If current case was deleted, clear selection
+                if (idsToDelete.includes(state.currentCaseId)) {
+                    state.currentCaseId = null;
+                    elements.formArea.innerHTML = '<div class="form-placeholder">Select or create a case to begin</div>';
+                    elements.preview.innerHTML = '<div class="preview-placeholder">Generated prompt will appear here</div>';
+                    elements.editCaseBtn.disabled = true;
+                    elements.deleteCaseBtn.disabled = true;
+                }
+
+                saveCases();
+                renderCaseSelector();
+                elements.deleteModal.style.display = 'none';
+                showNotification(`${idsToDelete.length} case(s) deleted`);
+            });
+
+            // Delete cancel button
+            document.getElementById('deleteCancelBtn').addEventListener('click', () => {
+                elements.deleteModal.style.display = 'none';
+            });
+
+            // Export button
+            elements.exportBtn.addEventListener('click', () => {
+                const dataStr = JSON.stringify(state.cases, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+
+                const exportFileDefaultName = 'llm-cases.json';
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+
+                showNotification('Cases exported successfully');
+            });
+
+            // Import button
+            elements.importBtn.addEventListener('click', () => {
+                document.getElementById('importData').value = '';
+                elements.importModal.style.display = 'flex';
+            });
+
+            // Import confirm button
+            document.getElementById('importConfirmBtn').addEventListener('click', () => {
+                const importData = document.getElementById('importData').value.trim();
+
+                if (!importData) {
+                    alert('Please paste JSON data to import');
+                    return;
+                }
+
+                try {
+                    const parsed = JSON.parse(importData);
+
+                    if (!Array.isArray(parsed)) {
+                        throw new Error('Data must be an array of cases');
+                    }
+
+                    // Validate each case
+                    parsed.forEach((caseItem, index) => {
+                        if (!caseItem.name || !caseItem.template) {
+                            throw new Error(`Case at index ${index} is missing name or template`);
+                        }
+                        if (!caseItem.id) {
+                            caseItem.id = Date.now().toString() + index;
+                        }
+                    });
+
+                    // Add imported cases to existing ones
+                    state.cases.push(...parsed);
+                    saveCases();
+                    renderCaseSelector();
+                    elements.importModal.style.display = 'none';
+                    showNotification(`${parsed.length} case(s) imported successfully`);
+
+                } catch (e) {
+                    alert(`Invalid JSON format: ${e.message}`);
+                }
+            });
+
+            // Import cancel button
+            document.getElementById('importCancelBtn').addEventListener('click', () => {
+                elements.importModal.style.display = 'none';
+            });
+
+            // Copy button
+            elements.copyBtn.addEventListener('click', () => {
+                const previewText = elements.preview.textContent;
+                if (!previewText || previewText.includes('Generated prompt will appear here')) {
+                    alert('No prompt to copy');
+                    return;
+                }
+
+                navigator.clipboard.writeText(previewText)
+                    .then(() => showNotification('Copied to clipboard!'))
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                        alert('Failed to copy to clipboard');
+                    });
+            });
+
+            // 🧑🏻‍💻🧑🏻‍💻🧑🏻‍💻
+            elements.submitBtn.addEventListener('click', () => {
+                const txt = elements.preview.textContent;
+                submitToServer(state.cases[state.currentCaseId], txt);
+            });
+
+            // Close modals when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === elements.editorModal) {
+                    elements.editorModal.style.display = 'none';
+                }
+                if (e.target === elements.importModal) {
+                    elements.importModal.style.display = 'none';
+                }
+                if (e.target === elements.deleteModal) {
+                    elements.deleteModal.style.display = 'none';
+                }
+            });
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
