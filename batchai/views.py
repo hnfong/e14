@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from . import models
 from django.middleware.csrf import get_token
 from django.shortcuts import render
@@ -41,7 +41,9 @@ def submit_request(request):
         request_obj.max_tokens = int(request.POST.get("max_tokens") or "0")
         request_obj.purpose = request.POST.get("purpose") or ""
         request_obj.save()
-    return render(request, "batchai/submit.html", {})
+        return HttpResponseRedirect("/batchai/submit_request")
+    else:
+        return render(request, "batchai/submit.html", {})
 
 # FIXME: use some other auth method.
 @csrf_exempt
