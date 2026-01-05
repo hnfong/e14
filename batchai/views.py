@@ -41,7 +41,7 @@ def submit_request(request):
         request_obj.max_tokens = int(request.POST.get("max_tokens") or "0")
         request_obj.purpose = request.POST.get("purpose") or ""
         request_obj.save()
-        return HttpResponseRedirect("/batchai/submit_request")
+        return HttpResponseRedirect("/batchai/")
     else:
         return render(request, "batchai/submit.html", {})
 

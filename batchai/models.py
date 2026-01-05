@@ -5,7 +5,7 @@ def uuid_string():
     import uuid
     return uuid.uuid4().hex
 
-MODEL_CHOICES=["gemma-3-27B", "Kimi-K2", "QwenLong-L1.5-30B-A3B"]
+MODEL_CHOICES=["gemma-3-27B", "Kimi-K2-Instruct-0905", "QwenLong-L1.5-30B-A3B"]
 
 class TextInferenceRequest(models.Model):
     STATUS_PENDING = 0
