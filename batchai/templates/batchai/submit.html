@@ -39,7 +39,7 @@
             align-items: center;
         }
 
-        .case-selector {
+        .scenario-selector {
             flex: 1;
             min-width: 200px;
         }
@@ -233,7 +233,7 @@
             z-index: 1001;
         }
 
-        .case-item {
+        .scenario-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -241,7 +241,7 @@
             border-bottom: 1px solid #eee;
         }
 
-        .case-list {
+        .scenario-list {
             max-height: 300px;
             overflow-y: auto;
             margin-bottom: 20px;
@@ -252,14 +252,14 @@
     <h1>LLM Prompt Generator</h1>
 
     <div class="header">
-        <div class="case-selector">
-            <select id="caseSelect">
-                <option value="">Select a case...</option>
+        <div class="scenario-selector">
+            <select id="scenarioSelect">
+                <option value="">Select a scenario...</option>
             </select>
         </div>
-        <button id="newCaseBtn">New Case</button>
-        <button id="editCaseBtn" class="secondary">Edit Case</button>
-        <button id="deleteCaseBtn" class="secondary">Delete Case</button>
+        <button id="newScenarioBtn">New Scenario</button>
+        <button id="editScenarioBtn" class="secondary">Edit Scenario</button>
+        <button id="deleteScenarioBtn" class="secondary">Delete Scenario</button>
         <button id="exportBtn" class="secondary">Export</button>
         <button id="importBtn" class="secondary">Import</button>
     </div>
@@ -268,7 +268,7 @@
         <div class="panel form-container">
             <h2>Parameters</h2>
             <div id="formArea">
-                <div class="form-placeholder">Select or create a case to begin</div>
+                <div class="form-placeholder">Select or create a scenario to begin</div>
             </div>
         </div>
 
@@ -284,17 +284,17 @@
         </div>
     </div>
 
-    <!-- Case Editor Modal -->
+    <!-- Scenario Editor Modal -->
     <div id="editorModal" class="modal">
         <div class="modal-content">
-            <h2 id="modalTitle">New Case</h2>
+            <h2 id="modalTitle">New Scenario</h2>
             <div class="form-group">
-                <label for="caseName">Case Name</label>
-                <input type="text" id="caseName" placeholder="e.g., Summarize Legal Judgment">
+                <label for="scenarioName">Scenario Name</label>
+                <input type="text" id="scenarioName" placeholder="e.g., Summarize Legal Judgment">
             </div>
             <div class="form-group">
-                <label for="caseTemplate">Template</label>
-                <textarea id="caseTemplate" rows="10" placeholder="Enter your prompt template with placeholders like ${text:textarea}"></textarea>
+                <label for="scenarioTemplate">Template</label>
+                <textarea id="scenarioTemplate" rows="10" placeholder="Enter your prompt template with placeholders like ${text:textarea}"></textarea>
             </div>
 
             <div class="syntax-help">
@@ -313,7 +313,7 @@
             </div>
 
             <div class="modal-buttons">
-                <button id="saveCaseBtn">Save Case</button>
+                <button id="saveScenarioBtn">Save Scenario</button>
                 <button id="cancelBtn" class="secondary">Cancel</button>
             </div>
         </div>
@@ -322,10 +322,10 @@
     <!-- Import Modal -->
     <div id="importModal" class="modal">
         <div class="modal-content">
-            <h2>Import Cases</h2>
+            <h2>Import Scenarios</h2>
             <div class="form-group">
                 <label for="importData">Paste JSON data:</label>
-                <textarea id="importData" rows="10" placeholder='[{"name": "Case 1", "template": "..."}]'></textarea>
+                <textarea id="importData" rows="10" placeholder='[{"name": "Scenario 1", "template": "..."}]'></textarea>
             </div>
             <div class="modal-buttons">
                 <button id="importConfirmBtn">Import</button>
@@ -334,12 +334,12 @@
         </div>
     </div>
 
-    <!-- Case List Modal for Delete -->
+    <!-- Scenario List Modal for Delete -->
     <div id="deleteModal" class="modal">
         <div class="modal-content">
-            <h2>Delete Case</h2>
-            <div class="case-list" id="deleteCaseList">
-                <!-- Cases will be listed here -->
+            <h2>Delete Scenario</h2>
+            <div class="scenario-list" id="deleteScenarioList">
+                <!-- Scenarios will be listed here -->
             </div>
             <div class="modal-buttons">
                 <button id="deleteConfirmBtn">Delete Selected</button>
@@ -365,19 +365,19 @@
     <script>
         // State management
         const state = {
-            cases: [],
-            currentCaseId: null,
+            scenarios: [],
+            currentScenarioId: null,
             formValues: {}
         };
 
         // DOM Elements
         const elements = {
-            caseSelect: document.getElementById('caseSelect'),
+            scenarioSelect: document.getElementById('scenarioSelect'),
             formArea: document.getElementById('formArea'),
             preview: document.getElementById('preview'),
-            newCaseBtn: document.getElementById('newCaseBtn'),
-            editCaseBtn: document.getElementById('editCaseBtn'),
-            deleteCaseBtn: document.getElementById('deleteCaseBtn'),
+            newScenarioBtn: document.getElementById('newScenarioBtn'),
+            editScenarioBtn: document.getElementById('editScenarioBtn'),
+            deleteScenarioBtn: document.getElementById('deleteScenarioBtn'),
             exportBtn: document.getElementById('exportBtn'),
             importBtn: document.getElementById('importBtn'),
             copyBtn: document.getElementById('copyBtn'),
@@ -390,38 +390,38 @@
 
         // Storage keys
         const STORAGE_KEYS = {
-            CASES: 'llmPromptCases',
-            LAST_SELECTED: 'lastSelectedCaseId'
+            CASES: 'llmPromptScenarios',
+            LAST_SELECTED: 'lastSelectedScenarioId'
         };
 
         // Initialize
         function init() {
-            loadCases();
+            loadScenarios();
             setupEventListeners();
-            renderCaseSelector();
+            renderScenarioSelector();
 
-            // Select last used case if available
-            const lastCaseId = localStorage.getItem(STORAGE_KEYS.LAST_SELECTED);
-            if (lastCaseId && state.cases.find(c => c.id === lastCaseId)) {
-                selectCase(lastCaseId);
+            // Select last used scenario if available
+            const lastScenarioId = localStorage.getItem(STORAGE_KEYS.LAST_SELECTED);
+            if (lastScenarioId && state.scenarios.find(c => c.id === lastScenarioId)) {
+                selectScenario(lastScenarioId);
             }
         }
 
-        // Load cases from localStorage
-        function loadCases() {
+        // Load scenarios from localStorage
+        function loadScenarios() {
             const saved = localStorage.getItem(STORAGE_KEYS.CASES);
             if (saved) {
                 try {
-                    state.cases = JSON.parse(saved);
+                    state.scenarios = JSON.parse(saved);
                 } catch (e) {
-                    console.error('Failed to parse saved cases:', e);
-                    state.cases = [];
+                    console.error('Failed to parse saved scenarios:', e);
+                    state.scenarios = [];
                 }
             }
 
-            // Add default examples if no cases exist
-            if (state.cases.length === 0) {
-                state.cases = [
+            // Add default examples if no scenarios exist
+            if (state.scenarios.length === 0) {
+                state.scenarios = [
                     {
                         id: '1',
                         name: 'Summarize Text',
@@ -438,13 +438,13 @@
                         template: 'Create ${count:number:5} example sentences in ${language:select:Cantonese,Mandarin,Japanese} using the word "${word:text}". Include ${includeTranslation:checkbox} translation.'
                     }
                 ];
-                saveCases();
+                saveScenarios();
             }
         }
 
-        // Save cases to localStorage
-        function saveCases() {
-            localStorage.setItem(STORAGE_KEYS.CASES, JSON.stringify(state.cases));
+        // Save scenarios to localStorage
+        function saveScenarios() {
+            localStorage.setItem(STORAGE_KEYS.CASES, JSON.stringify(state.scenarios));
         }
 
         // Parse template to extract parameters
@@ -602,11 +602,11 @@
 
         // Update preview with current form values
         function updatePreview() {
-            const currentCase = state.cases.find(c => c.id === state.currentCaseId);
-            if (!currentCase) return;
+            const currentScenario = state.scenarios.find(c => c.id === state.currentScenarioId);
+            if (!currentScenario) return;
 
             // Update form values from inputs
-            const params = parseTemplate(currentCase.template);
+            const params = parseTemplate(currentScenario.template);
             params.forEach(param => {
                 const input = document.querySelector(`[name="${param.name}"]`);
                 if (input) {
@@ -619,7 +619,7 @@
             });
 
             // Replace placeholders in template
-            let previewText = currentCase.template;
+            let previewText = currentScenario.template;
             const paramRegex = /\$\{([^}]+)\}/g;
 
             previewText = previewText.replace(paramRegex, (match, paramDef) => {
@@ -632,38 +632,38 @@
             elements.preview.textContent = previewText;
         }
 
-        // Render case selector dropdown
-        function renderCaseSelector() {
-            elements.caseSelect.innerHTML = '<option value="">Select a case...</option>';
+        // Render scenario selector dropdown
+        function renderScenarioSelector() {
+            elements.scenarioSelect.innerHTML = '<option value="">Select a scenario...</option>';
 
-            state.cases.forEach(caseItem => {
+            state.scenarios.forEach(scenarioItem => {
                 const option = document.createElement('option');
-                option.value = caseItem.id;
-                option.textContent = caseItem.name;
-                elements.caseSelect.appendChild(option);
+                option.value = scenarioItem.id;
+                option.textContent = scenarioItem.name;
+                elements.scenarioSelect.appendChild(option);
             });
         }
 
-        // Select a case
-        function selectCase(caseId) {
-            state.currentCaseId = caseId;
-            localStorage.setItem(STORAGE_KEYS.LAST_SELECTED, caseId);
+        // Select a scenario
+        function selectScenario(scenarioId) {
+            state.currentScenarioId = scenarioId;
+            localStorage.setItem(STORAGE_KEYS.LAST_SELECTED, scenarioId);
 
-            const selectedCase = state.cases.find(c => c.id === caseId);
-            if (!selectedCase) return;
+            const selectedScenario = state.scenarios.find(c => c.id === scenarioId);
+            if (!selectedScenario) return;
 
-            elements.caseSelect.value = caseId;
+            elements.scenarioSelect.value = scenarioId;
 
             // Parse template and generate form
-            const params = parseTemplate(selectedCase.template);
+            const params = parseTemplate(selectedScenario.template);
             generateForm(params);
 
             // Update preview
             updatePreview();
 
             // Enable/disable buttons
-            elements.editCaseBtn.disabled = false;
-            elements.deleteCaseBtn.disabled = false;
+            elements.editScenarioBtn.disabled = false;
+            elements.deleteScenarioBtn.disabled = false;
         }
 
         // Show notification
@@ -676,78 +676,78 @@
         }
 
         // 🧑🏻‍💻🧑🏻‍💻🧑🏻‍💻
-        function submitToServer(selectedCase, userPrompt) {
+        function submitToServer(selectedScenario, userPrompt) {
             const frm = document.getElementById("submitForm");
             frm.elements['user_prompt'].value = userPrompt;
-            frm.elements['llm_model'].value = selectedCase.defaultModel || 'gemma-3-27B';
-            frm.elements['max_tokens'].value = selectedCase.defaultTokens || '8000';
-            frm.elements['purpose'].value = selectedCase.name;
+            frm.elements['llm_model'].value = selectedScenario.defaultModel || 'gemma-3-27B';
+            frm.elements['max_tokens'].value = selectedScenario.defaultTokens || '8000';
+            frm.elements['purpose'].value = selectedScenario.name;
             frm.submit();
         }
 
         // Setup event listeners
         function setupEventListeners() {
-            // Case selection
-            elements.caseSelect.addEventListener('change', (e) => {
+            // Scenario selection
+            elements.scenarioSelect.addEventListener('change', (e) => {
                 if (e.target.value) {
-                    selectCase(e.target.value);
+                    selectScenario(e.target.value);
                 }
             });
 
-            // New case button
-            elements.newCaseBtn.addEventListener('click', () => {
-                document.getElementById('modalTitle').textContent = 'New Case';
-                document.getElementById('caseName').value = '';
-                document.getElementById('caseTemplate').value = '';
+            // New scenario button
+            elements.newScenarioBtn.addEventListener('click', () => {
+                document.getElementById('modalTitle').textContent = 'New Scenario';
+                document.getElementById('scenarioName').value = '';
+                document.getElementById('scenarioTemplate').value = '';
                 elements.editorModal.style.display = 'flex';
             });
 
-            // Edit case button
-            elements.editCaseBtn.addEventListener('click', () => {
-                if (!state.currentCaseId) return;
+            // Edit scenario button
+            elements.editScenarioBtn.addEventListener('click', () => {
+                if (!state.currentScenarioId) return;
 
-                const currentCase = state.cases.find(c => c.id === state.currentCaseId);
-                if (!currentCase) return;
+                const currentScenario = state.scenarios.find(c => c.id === state.currentScenarioId);
+                if (!currentScenario) return;
 
-                document.getElementById('modalTitle').textContent = 'Edit Case';
-                document.getElementById('caseName').value = currentCase.name;
-                document.getElementById('caseTemplate').value = currentCase.template;
+                document.getElementById('modalTitle').textContent = 'Edit Scenario';
+                document.getElementById('scenarioName').value = currentScenario.name;
+                document.getElementById('scenarioTemplate').value = currentScenario.template;
                 elements.editorModal.style.display = 'flex';
             });
 
-            // Save case button
-            document.getElementById('saveCaseBtn').addEventListener('click', () => {
-                const name = document.getElementById('caseName').value.trim();
-                const template = document.getElementById('caseTemplate').value.trim();
+            // Save scenario button
+            document.getElementById('saveScenarioBtn').addEventListener('click', () => {
+                const name = document.getElementById('scenarioName').value.trim();
+                const template = document.getElementById('scenarioTemplate').value.trim();
 
                 if (!name || !template) {
                     alert('Please enter both name and template');
                     return;
                 }
 
-                if (document.getElementById('modalTitle').textContent === 'New Case') {
-                    // Create new case
-                    const newCase = {
+                if (document.getElementById('modalTitle').textContent === 'New Scenario') {
+                    // Create new scenario
+                    const newScenario = {
                         id: Date.now().toString(),
                         name,
                         template
                     };
-                    state.cases.push(newCase);
-                    state.currentCaseId = newCase.id;
+                    state.scenarios.push(newScenario);
+                    state.currentScenarioId = newScenario.id;
                 } else {
-                    // Update existing case
-                    const index = state.cases.findIndex(c => c.id === state.currentCaseId);
+                    // Update existing scenario
+                    const index = state.scenarios.findIndex(c => c.id === state.currentScenarioId);
                     if (index !== -1) {
-                        state.cases[index].name = name;
-                        state.cases[index].template = template;
+                        state.scenarios[index].name = name;
+                        state.scenarios[index].template = template;
                     }
                 }
 
-                saveCases();
-                renderCaseSelector();
-                selectCase(state.currentCaseId);
+                saveScenarios();
+                renderScenarioSelector();
+                selectScenario(state.currentScenarioId);
                 elements.editorModal.style.display = 'none';
-                showNotification('Case saved successfully');
+                showNotification('Scenario saved successfully');
             });
 
             // Cancel button
@@ -755,15 +755,15 @@
                 elements.editorModal.style.display = 'none';
             });
 
-            // Delete case button
-            elements.deleteCaseBtn.addEventListener('click', () => {
+            // Delete scenario button
+            elements.deleteScenarioBtn.addEventListener('click', () => {
                 elements.deleteModal.style.display = 'flex';
-                const deleteList = document.getElementById('deleteCaseList');
+                const deleteList = document.getElementById('deleteScenarioList');
                 deleteList.innerHTML = '';
 
-                state.cases.forEach(caseItem => {
+                state.scenarios.forEach(scenarioItem => {
                     const div = document.createElement('div');
-                    div.className = 'case-item';
+                    div.className = 'scenario-item';
 
                     const label = document.createElement('label');
                     label.style.display = 'flex';
@@ -772,11 +772,11 @@
 
                     const checkbox = document.createElement('input');
                     checkbox.type = 'checkbox';
-                    checkbox.value = caseItem.id;
-                    checkbox.checked = caseItem.id === state.currentCaseId;
+                    checkbox.value = scenarioItem.id;
+                    checkbox.checked = scenarioItem.id === state.currentScenarioId;
 
                     const span = document.createElement('span');
-                    span.textContent = caseItem.name;
+                    span.textContent = scenarioItem.name;
 
                     label.appendChild(checkbox);
                     label.appendChild(span);
@@ -787,30 +787,30 @@
 
             // Delete confirm button
             document.getElementById('deleteConfirmBtn').addEventListener('click', () => {
-                const checkboxes = document.querySelectorAll('#deleteCaseList input[type="checkbox"]:checked');
+                const checkboxes = document.querySelectorAll('#deleteScenarioList input[type="checkbox"]:checked');
                 const idsToDelete = Array.from(checkboxes).map(cb => cb.value);
 
                 if (idsToDelete.length === 0) {
-                    alert('Please select at least one case to delete');
+                    alert('Please select at least one scenario to delete');
                     return;
                 }
 
-                // Remove cases
-                state.cases = state.cases.filter(c => !idsToDelete.includes(c.id));
+                // Remove scenarios
+                state.scenarios = state.scenarios.filter(c => !idsToDelete.includes(c.id));
 
-                // If current case was deleted, clear selection
-                if (idsToDelete.includes(state.currentCaseId)) {
-                    state.currentCaseId = null;
-                    elements.formArea.innerHTML = '<div class="form-placeholder">Select or create a case to begin</div>';
+                // If current scenario was deleted, clear selection
+                if (idsToDelete.includes(state.currentScenarioId)) {
+                    state.currentScenarioId = null;
+                    elements.formArea.innerHTML = '<div class="form-placeholder">Select or create a scenario to begin</div>';
                     elements.preview.innerHTML = '<div class="preview-placeholder">Generated prompt will appear here</div>';
-                    elements.editCaseBtn.disabled = true;
-                    elements.deleteCaseBtn.disabled = true;
+                    elements.editScenarioBtn.disabled = true;
+                    elements.deleteScenarioBtn.disabled = true;
                 }
 
-                saveCases();
-                renderCaseSelector();
+                saveScenarios();
+                renderScenarioSelector();
                 elements.deleteModal.style.display = 'none';
-                showNotification(`${idsToDelete.length} case(s) deleted`);
+                showNotification(`${idsToDelete.length} scenario(s) deleted`);
             });
 
             // Delete cancel button
@@ -820,16 +820,16 @@
 
             // Export button
             elements.exportBtn.addEventListener('click', () => {
-                const dataStr = JSON.stringify(state.cases, null, 2);
+                const dataStr = JSON.stringify(state.scenarios, null, 2);
                 const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
 
-                const exportFileDefaultName = 'llm-cases.json';
+                const exportFileDefaultName = 'llm-scenarios.json';
                 const linkElement = document.createElement('a');
                 linkElement.setAttribute('href', dataUri);
                 linkElement.setAttribute('download', exportFileDefaultName);
                 linkElement.click();
 
-                showNotification('Cases exported successfully');
+                showNotification('Scenarios exported successfully');
             });
 
             // Import button
@@ -851,25 +851,25 @@
                     const parsed = JSON.parse(importData);
 
                     if (!Array.isArray(parsed)) {
-                        throw new Error('Data must be an array of cases');
+                        throw new Error('Data must be an array of scenarios');
                     }
 
-                    // Validate each case
-                    parsed.forEach((caseItem, index) => {
-                        if (!caseItem.name || !caseItem.template) {
-                            throw new Error(`Case at index ${index} is missing name or template`);
+                    // Validate each scenario
+                    parsed.forEach((scenarioItem, index) => {
+                        if (!scenarioItem.name || !scenarioItem.template) {
+                            throw new Error(`Scenario at index ${index} is missing name or template`);
                         }
-                        if (!caseItem.id) {
-                            caseItem.id = Date.now().toString() + index;
+                        if (!scenarioItem.id) {
+                            scenarioItem.id = Date.now().toString() + index;
                         }
                     });
 
-                    // Add imported cases to existing ones
-                    state.cases.push(...parsed);
-                    saveCases();
-                    renderCaseSelector();
+                    // Add imported scenarios to existing ones
+                    state.scenarios.push(...parsed);
+                    saveScenarios();
+                    renderScenarioSelector();
                     elements.importModal.style.display = 'none';
-                    showNotification(`${parsed.length} case(s) imported successfully`);
+                    showNotification(`${parsed.length} scenario(s) imported successfully`);
 
                 } catch (e) {
                     alert(`Invalid JSON format: ${e.message}`);
@@ -900,7 +900,7 @@
             // 🧑🏻‍💻🧑🏻‍💻🧑🏻‍💻
             elements.submitBtn.addEventListener('click', () => {
                 const txt = elements.preview.textContent;
-                submitToServer(state.cases[state.currentCaseId], txt);
+                submitToServer(state.scenarios[state.currentScenarioId], txt);
             });
 
             // Close modals when clicking outside
