@@ -294,7 +294,11 @@
             </div>
             <div class="form-group">
                 <label for="scenarioTemplate">Template</label>
-                <textarea id="scenarioTemplate" rows="10" placeholder="Enter your prompt template with placeholders like ${text:textarea}"></textarea>
+                <textarea id="scenarioTemplate" rows="8" placeholder="Enter your prompt template with placeholders like ${text:textarea}"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="scenarioModel">LLM model</label>
+                <input type="text" id="scenarioModel" placeholder="gemma-3-27B">
             </div>
 
             <div class="syntax-help">
@@ -646,6 +650,7 @@
 
         // Select a scenario
         function selectScenario(scenarioId) {
+        console.log("changed scenario id", scenarioId);
             state.currentScenarioId = scenarioId;
             localStorage.setItem(STORAGE_KEYS.LAST_SELECTED, scenarioId);
 
@@ -677,10 +682,11 @@
 
         // 🧑🏻‍💻🧑🏻‍💻🧑🏻‍💻
         function submitToServer(selectedScenario, userPrompt) {
+            console.log("selectedScenario", selectedScenario);
             const frm = document.getElementById("submitForm");
             frm.elements['user_prompt'].value = userPrompt;
-            frm.elements['llm_model'].value = selectedScenario.defaultModel || 'gemma-3-27B';
-            frm.elements['max_tokens'].value = selectedScenario.defaultTokens || '8000';
+            frm.elements['llm_model'].value = selectedScenario.model || 'gemma-3-27B';
+            frm.elements['max_tokens'].value = selectedScenario.tokens || '8000';
             frm.elements['purpose'].value = selectedScenario.name;
             frm.submit();
         }
@@ -719,6 +725,7 @@
             document.getElementById('saveScenarioBtn').addEventListener('click', () => {
                 const name = document.getElementById('scenarioName').value.trim();
                 const template = document.getElementById('scenarioTemplate').value.trim();
+                const model = document.getElementById('scenarioModel').value.trim();
 
                 if (!name || !template) {
                     alert('Please enter both name and template');
@@ -730,7 +737,8 @@
                     const newScenario = {
                         id: Date.now().toString(),
                         name,
-                        template
+                        template,
+                        model
                     };
                     state.scenarios.push(newScenario);
                     state.currentScenarioId = newScenario.id;
@@ -740,6 +748,7 @@
                     if (index !== -1) {
                         state.scenarios[index].name = name;
                         state.scenarios[index].template = template;
+                        state.scenarios[index].model = model;
                     }
                 }
 
@@ -900,7 +909,8 @@
             // 🧑🏻‍💻🧑🏻‍💻🧑🏻‍💻
             elements.submitBtn.addEventListener('click', () => {
                 const txt = elements.preview.textContent;
-                submitToServer(state.scenarios[state.currentScenarioId], txt);
+                const index = state.scenarios.findIndex(c => c.id === state.currentScenarioId);
+                submitToServer(state.scenarios[index], txt);
             });
 
             // Close modals when clicking outside
