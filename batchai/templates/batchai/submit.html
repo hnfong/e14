@@ -278,6 +278,9 @@
                 <button id="copyBtn">Copy to Clipboard</button>
                 <button id="submitBtn">Submit</button>
             </div>
+            <div id="modelDiev">
+                <input type="text" name="model" id="model" />
+            </div>
             <div id="preview" class="preview">
                 <div class="preview-placeholder">Generated prompt will appear here</div>
             </div>
@@ -379,6 +382,7 @@
             scenarioSelect: document.getElementById('scenarioSelect'),
             formArea: document.getElementById('formArea'),
             preview: document.getElementById('preview'),
+            model: document.getElementById('model'),
             newScenarioBtn: document.getElementById('newScenarioBtn'),
             editScenarioBtn: document.getElementById('editScenarioBtn'),
             deleteScenarioBtn: document.getElementById('deleteScenarioBtn'),
@@ -634,6 +638,7 @@
             });
 
             elements.preview.textContent = previewText;
+            elements.model.value = currentScenario.model || '';
         }
 
         // Render scenario selector dropdown
@@ -685,7 +690,7 @@
             console.log("selectedScenario", selectedScenario);
             const frm = document.getElementById("submitForm");
             frm.elements['user_prompt'].value = userPrompt;
-            frm.elements['llm_model'].value = selectedScenario.model || 'gemma-3-27B';
+            frm.elements['llm_model'].value = elements.model.value || selectedScenario.model || 'gemma-3-27B';
             frm.elements['max_tokens'].value = selectedScenario.tokens || '8000';
             frm.elements['purpose'].value = selectedScenario.name;
             frm.submit();
@@ -718,6 +723,7 @@
                 document.getElementById('modalTitle').textContent = 'Edit Scenario';
                 document.getElementById('scenarioName').value = currentScenario.name;
                 document.getElementById('scenarioTemplate').value = currentScenario.template;
+                document.getElementById('scenarioModel').value = currentScenario.model;
                 elements.editorModal.style.display = 'flex';
             });
 
