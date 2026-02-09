@@ -10,6 +10,7 @@
       font-size: 14px;
       margin: 10px;
       line-height: 1.5;
+      background-color: #E4E4E4;
     }
     h1 {
       font-size: 1.5rem;
@@ -111,13 +112,12 @@
           </div>
         </td>
         <td>
-          <span class="" onclick="toggleExpand(this)">
+          <span class="" onclick="toggleExpandOne(this)">
             <span class="truncatedText">
               {{ req.result|truncatechars:50 }}
             </span>
             <span class="expandedText">{{ req.result|linebreaksbr }}</span>
           </span>
-	  - <span class="expandOneAction" onclick="toggleExpandOne(this)">Expand</span>
         </td>
         <td>{{ req.status }}</td>
         <td><a href="{% url 'admin:batchai_textinferencerequest_change' req.id %}" class="admin-link">View</a></td>
@@ -135,21 +135,11 @@
   <div id="expandedMainText">
   </div>
   <script>
-    function toggleExpand(element) {
-      const p = element.parentElement;
-      if (p.classList.contains('expanded')) {
-        p.classList.remove('expanded');
-      } else {
-        p.classList.add('expanded');
-        console.log(p);
-      }
-    }
     function toggleExpandOne(element) {
       const mainText = document.getElementById("expandedMainText");
       const p = element.parentElement;
       const t = p.querySelector(".expandedText").innerHTML;
       mainText.innerHTML = t;
-	    console.log(t);
     }
   </script>
 </body>
