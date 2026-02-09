@@ -28,7 +28,10 @@ def pending_requests(request):
     return JsonResponse({"requests": data, "csrf_token": get_token(request)}, safe=False)
 
 def html_list(request):
+    from . import paginate
+
     items = models.TextInferenceRequest.list().filter(requester=request.user).order_by("-created")
+    items = paginate.paginate(items, 5, request)
     return render(request, "batchai/list.html", { "items": items })
 
 def submit_request(request):
