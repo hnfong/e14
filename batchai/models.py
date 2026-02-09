@@ -30,7 +30,7 @@ class TextInferenceRequest(models.Model):
     purpose = models.TextField(blank=True)
     system_prompt = models.TextField(blank=True)
     user_prompt = models.TextField()
-    llm_model = models.TextField(default="gemma-3-27B", choices=zip(MODEL_CHOICES, MODEL_CHOICES))
+    llm_model = models.TextField(default="gemma-3-27B")
     temperature = models.FloatField(default=0.3)
     max_tokens = models.IntegerField(default=4000)
     created = models.DateTimeField(auto_now_add=True)
