@@ -4,8 +4,9 @@ cd ~/e14-backup
 
 # To get this working on macOS you may need to give "Full Disk Access" to /usr/sbin/cron in System Preferences
 
-ssh e14@siyeah.com 'bzip2 -c ~/e14/db.sqlite3 > db.sqlite3.bz2'
+ssh -o WarnWeakCrypto=no e14@siyeah.com 'bzip2 -c ~/e14/db.sqlite3 > db.sqlite3.bz2'
 scp -C e14@siyeah.com:~/db.sqlite3.bz2 .
 mv db.sqlite3.bz2 db.sqlite3-`date +%s`.bz2
 
 rsync -aH e14@siyeah.com:~/e14/media .
+chmod 755 ~/e14-backup/media/*
