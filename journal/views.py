@@ -8,6 +8,9 @@ from . import models
 
 from . import dj
 
+from . import common
+
+@common.require_secret_cookie("journal_secret", "there are no secrets", "journal/cookie.html")
 def entry_list(request, typ):
     assert typ in models.Entry.ENTRY_TYPES_KEYS
     entries = models.Entry.list(viewer=request.user).filter(entry_type=typ)
