@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Sidney Fong | Links</title>
+ <meta name="description" content="Links and bio for Sidney Fong">
+
+ <style>
+  /* --- CSS VARIABLES & RESET --- */
+  :root {
+   --bg-color: #f3f4f6;
+   --card-bg: #ffffff;
+   --text-main: #1f2937;
+   --text-muted: #6b7280;
+   --accent-color: #4f46e5; /* Indigo */
+   --accent-hover: #4338ca;
+   --border-color: #e5e7eb;
+   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  * {
+   box-sizing: border-box;
+   margin: 0;
+   padding: 0;
+  }
+
+  body {
+   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+   background-color: var(--bg-color);
+   color: var(--text-main);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   min-height: 100vh;
+   padding: 20px;
+   line-height: 1.5;
+  }
+
+  /* --- LAYOUT CONTAINER --- */
+  .container {
+   width: 100%;
+   max-width: 480px; /* Limits width on desktop */
+   background: var(--card-bg);
+   padding: 40px 30px;
+   border-radius: 24px;
+   box-shadow: var(--shadow);
+   text-align: center;
+   animation: fadeIn 0.8s ease-out;
+  }
+
+  /* --- PROFILE SECTION --- */
+  .profile-img {
+   width: 100px;
+   height: 100px;
+   background-color: #e5e7eb; /* Placeholder grey */
+   border-radius: 50%;
+   margin: 0 auto 20px auto;
+   background-image: url('TODO');
+   background-size: cover;
+   background-position: center;
+   border: 3px solid var(--card-bg);
+   box-shadow: 0 0 0 2px var(--bg-color);
+  }
+
+  h1 {
+   font-size: 1.5rem;
+   font-weight: 600;
+   margin-bottom: 8px;
+   color: var(--text-main);
+  }
+
+  .bio {
+   color: var(--text-muted);
+   font-size: 0.95rem;
+   margin-bottom: 30px;
+   max-width: 90%;
+   margin-left: auto;
+   margin-right: auto;
+  }
+
+  /* --- LINKS SECTION --- */
+  .links-container {
+   display: flex;
+   flex-direction: column;
+   gap: 16px;
+  }
+
+  .link-item {
+   display: flex;
+   align-items: center;
+   justify-content: space-between; /* Icon left, label left, arrow right */
+   text-decoration: none;
+   padding: 16px 20px;
+   background-color: var(--bg-color);
+   border: 1px solid transparent;
+   border-radius: 12px;
+   color: var(--text-main);
+   font-weight: 500;
+   transition: all 0.2s ease;
+   position: relative;
+  }
+
+  /* Hover Effects */
+  .link-item:hover {
+   transform: translateY(-2px);
+   background-color: #f9fafb;
+   border-color: var(--border-color);
+   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+   color: var(--accent-color);
+  }
+
+  /* Icon styling */
+  .link-item svg {
+   width: 24px;
+   height: 24px;
+   margin-right: 16px;
+   flex-shrink: 0;
+   fill: var(--text-main);
+   transition: fill 0.2s ease;
+  }
+
+  .link-item:hover svg {
+   fill: var(--accent-color);
+  }
+
+  .link-content {
+   display: flex;
+   align-items: center;
+   flex-grow: 1;
+  }
+
+  /* Special style for the "Note" link to make it stand out */
+  .link-item.note-link {
+   background-color: var(--accent-color);
+   color: white;
+   border: none;
+  }
+  
+  .link-item.note-link svg {
+   fill: white;
+  }
+
+  .link-item.note-link:hover {
+   background-color: var(--accent-hover);
+   color: white;
+   box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+  }
+
+  /* --- FOOTER --- */
+  footer {
+   margin-top: 40px;
+   font-size: 0.75rem;
+   color: #9ca3af;
+  }
+
+  /* --- ANIMATION --- */
+  @keyframes fadeIn {
+   from { opacity: 0; transform: translateY(10px); }
+   to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* --- MOBILE TWEAKS --- */
+  @media (max-width: 400px) {
+   .container {
+    padding: 30px 20px;
+   }
+   h1 { font-size: 1.3rem; }
+  }
+ </style>
+</head>
+<body>
+
+ <div class="container">
+  <!-- Profile Image (Auto-generated from name, replace src if you have a photo) -->
+  <div class="profile-img"></div>
+
+  <!-- Name -->
+  <h1>Sidney Fong</h1>
+
+  <!-- Bio -->
+  <p class="bio">
+    Looking for interesting ventures.
+  </p>
+
+  <!-- Links -->
+  <div class="links-container">
+   <!-- Blog (Placed first as requested, distinct) -->
+   <a href="https://hnfong.substack.com/" class="link-item" target="_blank">
+    <div class="link-content">
+     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M288 88C288 74.7 298.7 64 312 64C457.8 64 576 182.2 576 328C576 341.3 565.3 352 552 352C538.7 352 528 341.3 528 328C528 208.7 431.3 112 312 112C298.7 112 288 101.3 288 88zM144 160C170.5 160 192 181.5 192 208L192 432C192 458.5 213.5 480 240 480C266.5 480 288 458.5 288 432C288 405.5 266.5 384 240 384C231.2 384 224 376.8 224 368L224 304C224 295.2 231.2 288 240 288C319.5 288 384 352.5 384 432C384 511.5 319.5 576 240 576C160.5 576 96 511.5 96 432L96 208C96 181.5 117.5 160 144 160zM312 160C404.8 160 480 235.2 480 328C480 341.3 469.3 352 456 352C442.7 352 432 341.3 432 328C432 261.7 378.3 208 312 208C298.7 208 288 197.3 288 184C288 170.7 298.7 160 312 160z"/></svg>
+     <span>Read my Substack</span>
+    </div>
+    <svg style="margin-right:0; margin-left:auto; width:16px; height:16px;" viewBox="0 0 24 24"><path d="M12,4l-1.41,1.41L16.17,11H4v2h12.17l-5.58,5.59L12,20l8-8L12,4z"/></svg>
+   </a>
+
+   <!-- Anonymous Note Link (Highlighted) -->
+   <a href="https://e14.siyeah.com/note/" class="link-item note-link" target="_blank">
+    <div class="link-content">
+     <svg viewBox="0 0 24 24"><path d="M20,2L4,2c-1.1,0-2,0.9-2,2v12c0,1.1,0.9,2,2,2h14l4,4V4c0-1.1-0.9-2-2-2z M17.83,15H4V4h16v11.17z M17,12h-2v2h-2v-2h-2v2h-2V8h2V6h2v2h2V8h2V12z"/></svg>
+     <span>Send anonymous note</span>
+    </div>
+    <svg style="margin-right:0; margin-left:auto; width:16px; height:16px;" viewBox="0 0 24 24"><path d="M12,4l-1.41,1.41L16.17,11H4v2h12.17l-5.58,5.59L12,20l8-8L12,4z"/></svg>
+   </a>
+
+   <!-- X (Twitter) -->
+   <a href="https://x.com/hnfong" class="link-item" target="_blank">
+    <div class="link-content">
+     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M453.2 112L523.8 112L369.6 288.2L551 528L409 528L297.7 382.6L170.5 528L99.8 528L264.7 339.5L90.8 112L236.4 112L336.9 244.9L453.2 112zM428.4 485.8L467.5 485.8L215.1 152L173.1 152L428.4 485.8z"/></svg>
+     <span>X (Twitter)</span>
+    </div>
+   </a>
+
+   <!-- GitHub -->
+   <a href="https://github.com/hnfong" class="link-item" target="_blank">
+    <div class="link-content">
+     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M237.9 461.4C237.9 463.4 235.6 465 232.7 465C229.4 465.3 227.1 463.7 227.1 461.4C227.1 459.4 229.4 457.8 232.3 457.8C235.3 457.5 237.9 459.1 237.9 461.4zM206.8 456.9C206.1 458.9 208.1 461.2 211.1 461.8C213.7 462.8 216.7 461.8 217.3 459.8C217.9 457.8 216 455.5 213 454.6C210.4 453.9 207.5 454.9 206.8 456.9zM251 455.2C248.1 455.9 246.1 457.8 246.4 460.1C246.7 462.1 249.3 463.4 252.3 462.7C255.2 462 257.2 460.1 256.9 458.1C256.6 456.2 253.9 454.9 251 455.2zM316.8 72C178.1 72 72 177.3 72 316C72 426.9 141.8 521.8 241.5 555.2C254.3 557.5 258.8 549.6 258.8 543.1C258.8 536.9 258.5 502.7 258.5 481.7C258.5 481.7 188.5 496.7 173.8 451.9C173.8 451.9 162.4 422.8 146 415.3C146 415.3 123.1 399.6 147.6 399.9C147.6 399.9 172.5 401.9 186.2 425.7C208.1 464.3 244.8 453.2 259.1 446.6C261.4 430.6 267.9 419.5 275.1 412.9C219.2 406.7 162.8 398.6 162.8 302.4C162.8 274.9 170.4 261.1 186.4 243.5C183.8 237 175.3 210.2 189 175.6C209.9 169.1 258 202.6 258 202.6C278 197 299.5 194.1 320.8 194.1C342.1 194.1 363.6 197 383.6 202.6C383.6 202.6 431.7 169 452.6 175.6C466.3 210.3 457.8 237 455.2 243.5C471.2 261.2 481 275 481 302.4C481 398.9 422.1 406.6 366.2 412.9C375.4 420.8 383.2 435.8 383.2 459.3C383.2 493 382.9 534.7 382.9 542.9C382.9 549.4 387.5 557.3 400.2 555C500.2 521.8 568 426.9 568 316C568 177.3 455.5 72 316.8 72zM169.2 416.9C167.9 417.9 168.2 420.2 169.9 422.1C171.5 423.7 173.8 424.4 175.1 423.1C176.4 422.1 176.1 419.8 174.4 417.9C172.8 416.3 170.5 415.6 169.2 416.9zM158.4 408.8C157.7 410.1 158.7 411.7 160.7 412.7C162.3 413.7 164.3 413.4 165 412C165.7 410.7 164.7 409.1 162.7 408.1C160.7 407.5 159.1 407.8 158.4 408.8zM190.8 444.4C189.2 445.7 189.8 448.7 192.1 450.6C194.4 452.9 197.3 453.2 198.6 451.6C199.9 450.3 199.3 447.3 197.3 445.4C195.1 443.1 192.1 442.8 190.8 444.4zM179.4 429.7C177.8 430.7 177.8 433.3 179.4 435.6C181 437.9 183.7 438.9 185 437.9C186.6 436.6 186.6 434 185 431.7C183.6 429.4 181 428.4 179.4 429.7z"/></svg>
+     <span>GitHub</span>
+    </div>
+   </a>
+
+   <!-- LinkedIn -->
+   <a href="https://www.linkedin.com/in/sidney-fong-8b80a12b/" class="link-item" target="_blank">
+    <div class="link-content">
+     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M512 96L127.9 96C110.3 96 96 110.5 96 128.3L96 511.7C96 529.5 110.3 544 127.9 544L512 544C529.6 544 544 529.5 544 511.7L544 128.3C544 110.5 529.6 96 512 96zM231.4 480L165 480L165 266.2L231.5 266.2L231.5 480L231.4 480zM198.2 160C219.5 160 236.7 177.2 236.7 198.5C236.7 219.8 219.5 237 198.2 237C176.9 237 159.7 219.8 159.7 198.5C159.7 177.2 176.9 160 198.2 160zM480.3 480L413.9 480L413.9 376C413.9 351.2 413.4 319.3 379.4 319.3C344.8 319.3 339.5 346.3 339.5 374.2L339.5 480L273.1 480L273.1 266.2L336.8 266.2L336.8 295.4L337.7 295.4C346.6 278.6 368.3 260.9 400.6 260.9C467.8 260.9 480.3 305.2 480.3 362.8L480.3 480z"/></svg>
+     <span>LinkedIn</span>
+    </div>
+   </a>
+
+   <!-- Facebook -->
+   <a href="https://www.facebook.com/si.fong.538672" class="link-item" target="_blank">
+    <div class="link-content">
+     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5l0-170.3-52.8 0 0-78.2 52.8 0 0-33.7c0-87.1 39.4-127.5 125-127.5 16.2 0 44.2 3.2 55.7 6.4l0 70.8c-6-.6-16.5-1-29.6-1-42 0-58.2 15.9-58.2 57.2l0 27.8 83.6 0-14.4 78.2-69.3 0 0 175.9C413.8 494.8 512 386.9 512 256z"/></svg>
+     <span>Facebook</span>
+    </div>
+   </a>
+
+   <!-- Journal (Private?) -->
+   <a href="https://e14.siyeah.com/journal/" class="link-item" target="_blank">
+    <div class="link-content">
+     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M192 576L512 576C529.7 576 544 561.7 544 544C544 526.3 529.7 512 512 512L512 445.3C530.6 438.7 544 420.9 544 400L544 112C544 85.5 522.5 64 496 64L192 64C139 64 96 107 96 160L96 480C96 533 139 576 192 576zM160 480C160 462.3 174.3 448 192 448L448 448L448 512L192 512C174.3 512 160 497.7 160 480zM370.1 163.2C372.7 160.6 376.8 160.1 380 162.1C412.1 182.1 433.4 217.7 433.4 258.3C433.4 320.9 382.7 371.6 320.1 371.6C257.5 371.6 206.7 320.9 206.7 258.3C206.7 217.7 228.1 182.1 260.1 162.1C263.2 160.1 267.3 160.6 270 163.2C272.7 165.8 273.1 169.9 271.2 173C266 181.6 263 191.7 263 202.5C263 217.6 268.9 231.3 278.5 241.6C281 244.3 281.4 248.3 279.4 251.3C274.7 258.7 272 267.4 272 276.8C272 298.4 286.3 316.7 306 322.7L307 297.9C299.9 293.5 295.2 285.7 295.2 276.8C295.2 267.2 300.7 258.8 308.7 254.7L312 172.9C312.2 168.6 315.7 165.2 320 165.2C324.3 165.2 327.8 168.6 328 172.9L331.3 254.7C339.3 258.8 344.8 267.1 344.8 276.8C344.8 285.7 340.1 293.5 333 297.9L334 322.7C353.6 316.7 367.9 298.6 368 277.1L368 276.5C367.9 267.2 365.3 258.6 360.6 251.3C358.7 248.2 359 244.2 361.5 241.6C371.1 231.4 377 217.7 377 202.5C377 191.7 374 181.6 368.8 173C366.9 169.8 367.4 165.8 370 163.2z"/></svg>
+     <span>Personal Journal</span>
+    </div>
+    <svg style="margin-right:0; margin-left:auto; width:16px; height:16px;" viewBox="0 0 24 24"><path d="M12,4l-1.41,1.41L16.17,11H4v2h12.17l-5.58,5.59L12,20l8-8L12,4z"/></svg>
+   </a>
+  </div>
+ </div>
+</body>
+</html>
