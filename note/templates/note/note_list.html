@@ -46,7 +46,7 @@
    <form method="post" action="{% url 'note:create_note' %}">{% csrf_token %}
     {% if user.is_staff %}<input type="text" name="title" class="form-control" placeholder="Title">{% endif %}
     <textarea name="content" class="form-control" placeholder="Content" rows="5" required></textarea>
-    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
    </form>
   </div>
 
