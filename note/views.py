@@ -10,7 +10,7 @@ staff_required = staff_member_required()
 def create_note(request):
     title = request.POST.get("title")
     content = request.POST.get("content", "")
-    if title == "":
+    if title == "" or not request.user.is_staff:
         title = "[autotitle] " + hashlib.sha1(content.encode("utf-8")).hexdigest()
 
     if title.startswith("[EDIT] "):
@@ -19,18 +19,20 @@ def create_note(request):
     else:
         is_edit = False
 
-    if title:
-        try:
-            note = Note.objects.get(title=title)
-            if is_edit:
-                note.contents = content
-            else:
-                note.contents += "\n----\n" + content
-            note.save()
-        except Note.DoesNotExist:
-            Note.objects.create(title=title, contents=content)
+    try:
+        note = Note.objects.get(title=title)
+        if is_edit:
+            note.contents = content
+        else:
+            note.contents += "\n----\n" + content
+        note.save()
+    except Note.DoesNotExist:
+        Note.objects.create(title=title, contents=content)
 
-    return redirect("/note/")
+    if not request.user.is_staff:
+        return redirect("/note/?sent=sent")
+    else:
+        return redirect("/note/")
 
 def note_list(request):
     notes = Note.objects.all().order_by('-modified_time')
