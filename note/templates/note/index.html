@@ -41,7 +41,12 @@
    animation: fadeIn 0.8s ease-out;
   }
   /* ... (Rest of your existing CSS for .profile-img, h1, .bio, .links-container, .link-item, etc.) ... */
-  .profile-img { width: 100px; height: 100px; background-color: #e5e7eb; border-radius: 50%; margin: 0 auto 20px auto; background-image: url('/static/profile.jpg'); }
+  .profile-img {
+  width: 100px; height: 100px; background-color: #e5e7eb; border-radius: 50%; margin: 0 auto 20px auto; background-image: url('/static/profile.jpg');
+  background-size: cover;      /* Scales image to fill the box while maintaining aspect ratio */
+  background-position: center; /* Ensures the center of the image stays visible */
+  background-repeat: no-repeat; /* Prevents the image from tiling if it's smaller than the box */
+  }
   h1 { font-size: 1.5rem; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
   .bio-short { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 30px; max-width: 90%; margin-left: auto; margin-right: auto; }
   .links-container { display: flex; flex-direction: column; gap: 16px; }
