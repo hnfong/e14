@@ -32,6 +32,77 @@
       <div class="media">
         {% if entry.media_file.url.lower|slice:"-4:" == ".jpg" or entry.media_file.url.lower|slice:"-4:" == ".png" or entry.media_file.url.lower|slice:"-5:" == ".jpeg" %}
           <img src="{{ entry.media_file.url }}" alt="attached image" style="max-width: 100%;">
+        {% elif entry.media_file.url.lower|slice:"-4:" == ".zip" %}
+          <div id="gallery"></div>
+
+{% comment %}
+🤖 DeepSeek v4 generated.
+{% endcomment %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<script>
+
+// Assume this is set by your server-side template
+const media_zip_url = "{{ entry.media_file.url }}";
+
+document.addEventListener('DOMContentLoaded', () => {
+
+(async () => {
+  const gallery = document.getElementById('gallery'); // a <ul> or <div> to hold images
+  if (!gallery) return;
+
+  try {
+    // 1. Fetch the ZIP as an ArrayBuffer
+    const response = await fetch(media_zip_url);
+    if (!response.ok) throw new Error(`Failed to fetch ZIP: ${response.status}`);
+    const buffer = await response.arrayBuffer();
+
+    // 2. Load the ZIP with JSZip
+    const zip = await JSZip.loadAsync(buffer);
+
+    // 3. Filter image files (by extension)
+    const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'];
+    const imageFiles = Object.keys(zip.files).filter(filename => {
+      const ext = filename.split('.').pop().toLowerCase();
+      return imageExtensions.includes(ext) && !zip.files[filename].dir;
+    });
+
+    // 4. Extract each image, create blob URLs, and insert into DOM
+    for (const filename of imageFiles) {
+      const blob = await zip.file(filename).async('blob');
+      const blobUrl = URL.createObjectURL(blob);
+
+      const div = document.createElement('div');
+      const img = document.createElement('img');
+      img.src = blobUrl;
+      img.alt = filename;
+      // Optional: set size constraints
+      img.style.maxWidth = '100%';
+      div.appendChild(img);
+      gallery.appendChild(div);
+
+      // Revoke blob URL after image loads to free memory
+      img.onload = () => URL.revokeObjectURL(blobUrl);
+      img.onerror = () => {
+        // Clean up if image fails
+        URL.revokeObjectURL(blobUrl);
+        div.remove(); // remove broken image placeholder
+      };
+    }
+  } catch (err) {
+    console.error('Gallery error:', err);
+    gallery.insertAdjacentHTML('beforeend', '<li>⚠️ Could not load gallery.</li>');
+  }
+})();
+
+
+});
+
+
+
+</script>
+
         {% else %}
           <a href="{{ entry.media_file.url }}" target="_blank">Download attached file</a>
         {% endif %}

@@ -26,3 +26,9 @@ urlpatterns = [
     path('batchai/', include('batchai.urls')),
     path("", index, name="index"),  # Map root URL to note.views.index
 ]
+
+from django.conf import settings
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    urlpatterns += static("media/", document_root=settings.MEDIA_ROOT)
+
