@@ -26,8 +26,8 @@
    <div class="content">
     {% if entry.plain_text %}
       <div class="plaintext">
-        {% if entry.content|length > 10000 %}
-          {{ entry.content|truncatechars:10000 }}
+        {% if entry.content|length > 5000 %}
+          {{ entry.content|truncatechars:5000 }}
           <p><a href="{% url 'journal:view_slug' entry.slug %}">Read the full entry →</a></p>
         {% else %}
           {{ entry.content|linebreaksbr }}
@@ -35,14 +35,14 @@
       </div>
     {% else %}
       <div class="markdown-source" style="display: none;">
-        {% if entry.content|length > 10000 %}
-          {{ entry.content|truncatechars:10000 }}
+        {% if entry.content|length > 5000 %}
+          {{ entry.content|truncatechars:5000 }}
         {% else %}
           {{ entry.content }}
         {% endif %}
       </div>
       <div class="markdown-rendered"></div>
-      {% if entry.content|length > 10000 %}
+      {% if entry.content|length > 5000 %}
         <p><a href="{% url 'journal:view_slug' entry.slug %}">Read the full entry →</a></p>
       {% endif %}
     {% endif %}
