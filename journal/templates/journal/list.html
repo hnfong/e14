@@ -34,13 +34,7 @@
         {% endif %}
       </div>
     {% else %}
-      <div class="markdown-source" style="display: none;">
-        {% if entry.content|length > 5000 %}
-          {{ entry.content|truncatechars:5000 }}
-        {% else %}
-          {{ entry.content }}
-        {% endif %}
-      </div>
+      <div class="markdown-source" style="display: none;">{% if entry.content|length > 5000 %}{{ entry.content|truncatechars:5000 }}{% else %}{{ entry.content }}{% endif %}</div>
       <div class="markdown-rendered"></div>
       {% if entry.content|length > 5000 %}
         <p><a href="{% url 'journal:view_slug' entry.slug %}">Read the full entry →</a></p>
