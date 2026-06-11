@@ -32,7 +32,7 @@
       <div class="media">
         {% if entry.media_file.url.lower|slice:"-4:" == ".jpg" or entry.media_file.url.lower|slice:"-4:" == ".png" or entry.media_file.url.lower|slice:"-5:" == ".jpeg" %}
           <img src="{{ entry.media_file.url }}" alt="attached image" style="max-width: 100%;">
-        {% elif entry.media_file.url.lower|slice:"-4:" == ".zip" %}
+        {% elif entry.media_file.url.lower|slice:"-4:" == ".zip" and entry.media_file.size < 20971520 %}
           <div id="gallery"></div>
 
 {% comment %}
