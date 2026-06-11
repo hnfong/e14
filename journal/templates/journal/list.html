@@ -52,7 +52,7 @@
         {% if entry.media_file.url.lower|slice:"-4:" == ".jpg" or entry.media_file.url.lower|slice:"-4:" == ".png" or entry.media_file.url.lower|slice:"-5:" == ".jpeg" %}
           <img src="{{ entry.media_file.url }}" alt="attached image" style="max-width: 100%;">
         {% else %}
-          (Click inside to see media file(s))
+          <a href="{% url 'journal:view_slug' entry.slug %}">(Click inside to see media file(s))</a>
         {% endif %}
       </div>
     {% endif %}
