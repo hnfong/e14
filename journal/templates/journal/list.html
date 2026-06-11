@@ -25,17 +25,34 @@
    </div>
    <div class="content">
     {% if entry.plain_text %}
-      <div class="plaintext">{{ entry.content|linebreaksbr }}</div>
+      <div class="plaintext">
+        {% if entry.content|length > 10000 %}
+          {{ entry.content|truncatechars:10000 }}
+          <p><a href="{% url 'entry_detail' entry.pk %}">Read the full entry →</a></p>
+        {% else %}
+          {{ entry.content|linebreaksbr }}
+        {% endif %}
+      </div>
     {% else %}
-      <div class="markdown-source" style="display: none;">{{ entry.content }}</div>
+      <div class="markdown-source" style="display: none;">
+        {% if entry.content|length > 10000 %}
+          {{ entry.content|truncatechars:10000 }}
+        {% else %}
+          {{ entry.content }}
+        {% endif %}
+      </div>
       <div class="markdown-rendered"></div>
+      {% if entry.content|length > 10000 %}
+        <p><a href="{% url 'entry_detail' entry.pk %}">Read the full entry →</a></p>
+      {% endif %}
     {% endif %}
+
     {% if entry.media_file %}
       <div class="media">
         {% if entry.media_file.url.lower|slice:"-4:" == ".jpg" or entry.media_file.url.lower|slice:"-4:" == ".png" or entry.media_file.url.lower|slice:"-5:" == ".jpeg" %}
           <img src="{{ entry.media_file.url }}" alt="attached image" style="max-width: 100%;">
         {% else %}
-          <a href="{{ entry.media_file.url }}" target="_blank">Download attached file</a>
+          (Click inside to see media file(s))
         {% endif %}
       </div>
     {% endif %}
