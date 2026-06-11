@@ -33,6 +33,29 @@
         {% if entry.media_file.url.lower|slice:"-4:" == ".jpg" or entry.media_file.url.lower|slice:"-4:" == ".png" or entry.media_file.url.lower|slice:"-5:" == ".jpeg" %}
           <img src="{{ entry.media_file.url }}" alt="attached image" style="max-width: 100%;">
         {% elif entry.media_file.url.lower|slice:"-4:" == ".zip" and entry.media_file.size < 20971520 %}
+<style>
+#gallery {
+  max-width: 800px;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+#gallery > div {
+  overflow: hidden;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  background: #fff;
+}
+
+#gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+</style>
           <div id="gallery"></div>
 
 {% comment %}
@@ -66,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const imageFiles = Object.keys(zip.files).filter(filename => {
       const ext = filename.split('.').pop().toLowerCase();
       return imageExtensions.includes(ext) && !zip.files[filename].dir;
-    });
+    }).sort();
 
     // 4. Extract each image, create blob URLs, and insert into DOM
     for (const filename of imageFiles) {
@@ -98,8 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 });
-
-
 
 </script>
 

@@ -30,5 +30,5 @@ urlpatterns = [
 from django.conf import settings
 if settings.DEBUG:
     from django.conf.urls.static import static
-    urlpatterns += static("media/", document_root=settings.MEDIA_ROOT)
+    urlpatterns += static("media/", document_root=settings.BASE_DIR / "media")
 
