@@ -27,7 +27,7 @@
     {% if entry.plain_text %}
       <div class="plaintext">
         {% if entry.content|length > 5000 %}
-          {{ entry.content|truncatechars:5000 }}
+          {{ entry.content|truncatechars:5000|linebreaksbr }}
           <p><a href="{% url 'journal:view_slug' entry.slug %}">Read the full entry →</a></p>
         {% else %}
           {{ entry.content|linebreaksbr }}
