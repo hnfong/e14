@@ -25,7 +25,7 @@ class EntryAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'tags', 'created_at', 'updated_at')
     list_filter = ('created_at', 'author')
     search_fields = ('title', 'content', 'tags')
-    prepopulated_fields = {'slug': ('title',)}
+    # prepopulated_fields = {'slug': ('title',)} # We're using a server side solution due to need to convert cjk to jyutping
     ordering = ['-created_at']
     fields = ('title', 'slug', 'entry_type', 'content', 'media_file', 'tags', 'ai_slop', 'is_hidden', 'is_public', 'created_at', 'plain_text' )
     readonly_fields = ('ai_slop', )
@@ -75,6 +75,11 @@ class EntryAdmin(admin.ModelAdmin):
                 month=int(m.group('month')),
                 day=int(m.group('day'))
             )
+
+
+        if not obj.slug:
+            from . import cjk
+            obj.slug = cjk.get_jyut_pings(obj.title)
 
         super().save_model(request, obj, form, change)
 

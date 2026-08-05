@@ -14,7 +14,7 @@ class Entry(models.Model):
     ENTRY_TYPES_KEYS = [x[0] for x in ENTRY_TYPES]
 
     title = models.CharField(max_length=500, blank=True, null=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True)
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     entry_type = models.CharField(max_length=20, choices=ENTRY_TYPES, default='blog')
 
